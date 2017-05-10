@@ -5,6 +5,9 @@
 **/
 package org.im.gate.server;
 
-public abstract class AbstractGate implements IGate {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+public abstract class AbstractGate implements IGate {
+	protected Logger logger = LogManager.getLogger();
 }

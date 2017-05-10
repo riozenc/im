@@ -9,7 +9,7 @@ package org.im.gate.bean;
 
 public class ServerBean {
 	protected String ip;
-	protected String port;
+	protected int port;
 
 	public String getIp() {
 		return ip;
@@ -19,11 +19,11 @@ public class ServerBean {
 		this.ip = ip;
 	}
 
-	public String getPort() {
+	public int getPort() {
 		return port;
 	}
 
-	public void setPort(String port) {
+	public void setPort(int port) {
 		this.port = port;
 	}
 

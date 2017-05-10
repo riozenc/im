@@ -6,5 +6,5 @@
 package org.im.gate.server;
 
 public interface IGate {
-	void startGate() throws Exception;
+	void startGate(int port) throws Exception;
 }
