@@ -26,26 +26,51 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 		in.markReaderIndex();
 
+		int length = in.readableBytes();
+
+//		if (in.readableBytes() < 6) {
+//			logger.info("readableBytes length less than 6 bytes, ignored");
+//			in.resetReaderIndex();
+//			return;
+//		}
+
+		ByteBuf byteBuf = Unpooled.buffer(length);
+
+		in.readBytes(byteBuf);
+
+		byte[] bs = byteBuf.array();// 获取数据
+		
+		System.out.println(new String(bs));
+
 		if (in.readableBytes() < 4) {
 			logger.info("readableBytes length less than 4 bytes, ignored");
 			in.resetReaderIndex();
 			return;
 		}
 
-		int length = in.readInt();
+		// 判断fe fe fe
+		if (bs[0] != 0xFE || bs[1] != 0xFE || bs[2] != 0xFE) {
+			logger.info("head is not FE FE FE, ignored");
+			in.resetReaderIndex();
+			return;
+		}
+
+		// 判断 开始标识
+		if (bs[3] != 0x16) {
+			logger.info("data flag is error, ignored");
+			in.resetReaderIndex();
+			return;
+		}
+
+		// 长度判断
 
 		int ptoNum = in.readInt();
 
-		ByteBuf byteBuf = Unpooled.buffer(length);
-
-		in.readBytes(byteBuf);
-
 		try {
-			/*
-			 * 解密消息体 ThreeDES des =
-			 * ctx.channel().attr(ClientAttr.ENCRYPT).get(); byte[] bareByte =
-			 * des.decrypt(inByte);
-			 */
+
+			// 解密消息体
+			// ThreeDES des = ctx.channel().attr(ClientAttr.ENCRYPT).get();
+			// byte[] bareByte = des.decrypt(inByte);
 
 			byte[] body = byteBuf.array();
 
@@ -56,6 +81,22 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		} catch (Exception e) {
 			logger.error(ctx.channel().remoteAddress() + ",decode failed.", e);
 		}
+	}
+
+	public static void main(String[] args) {
+		System.out.println(0x16);
+		System.out.println(0x10);
+		System.out.println(0xFE);
+		System.out.println(0x0221);
+		int i = 0x0221;
+
+		String s = Integer.toHexString(i);
+
+		System.out.println(s);
+
+		System.out.println(s.getBytes());
+		byte v = Integer.valueOf(s, 16).byteValue();
+		System.out.println(v);
 	}
 
 }

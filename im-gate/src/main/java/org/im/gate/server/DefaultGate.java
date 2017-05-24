@@ -6,12 +6,12 @@
 package org.im.gate.server;
 
 import java.net.InetSocketAddress;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLException;
 
 import org.im.gate.TransferHandlerMap;
+import org.im.gate.handler.GateServerHandler;
 import org.im.protocol.ParseRegistryMap;
+import org.im.protocol.code.PacketDecoder;
+import org.im.protocol.code.PacketEncoder;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -22,11 +22,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 /**
  * 默认的Gate（网关）
@@ -38,34 +33,22 @@ public class DefaultGate extends AbstractGate {
 	static final boolean SSL = System.getProperty("ssl") != null;
 
 	@Override
-	public void startGate(int port) throws CertificateException, SSLException {
+	public void startGate(int port) {
 		// TODO Auto-generated method stub
-		final SslContext sslCtx;
-		if (SSL) {
-			SelfSignedCertificate ssc = new SelfSignedCertificate();
-			sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
-		} else {
-			sslCtx = null;
-		}
+
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workGroup = new NioEventLoopGroup();
 
-		ServerBootstrap bootstrap = new ServerBootstrap();
-		bootstrap.group(bossGroup, workGroup);
-		bootstrap.channel(NioServerSocketChannel.class);
-		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
-		bootstrap.handler(new ChannelInitializer<SocketChannel>() {
-			@Override
-			public void initChannel(SocketChannel ch) throws Exception {
-				ChannelPipeline p = ch.pipeline();
-				if (sslCtx != null) {
-					p.addLast(sslCtx.newHandler(ch.alloc()));
-				}
-				p.addLast(new LoggingHandler(LogLevel.INFO));
-				// p.addLast(new WisdomDecodeHandler());
-				// p.addLast(new EchoServerHandler());
-			}
-		});
+		ServerBootstrap bootstrap = new ServerBootstrap().group(bossGroup, workGroup)
+				.channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
+					@Override
+					protected void initChannel(SocketChannel channel) throws Exception {
+						ChannelPipeline pipeline = channel.pipeline();
+						pipeline.addLast("MessageEncoder", new PacketEncoder());
+						pipeline.addLast("MessageDecoder", new PacketDecoder());
+						pipeline.addLast("ClientMessageHandler", new GateServerHandler());
+					}
+				});
 
 		bootstrap.bind(new InetSocketAddress(port)).addListener(new ChannelFutureListener() {
 			@Override

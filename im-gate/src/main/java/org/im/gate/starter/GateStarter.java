@@ -12,8 +12,12 @@ import java.security.cert.CertificateException;
 import javax.net.ssl.SSLException;
 
 import org.dom4j.Element;
+import org.im.gate.bean.AuthBean;
 import org.im.gate.bean.GateBean;
+import org.im.gate.bean.LogicBean;
 import org.im.gate.server.DefaultGate;
+import org.im.gate.server.DefaultGateAuthServer;
+import org.im.gate.server.DefaultGateLogicServer;
 
 import com.riozenc.quicktool.common.util.xml.XmlParseUtils;
 import com.riozenc.quicktool.config.Global;
@@ -29,16 +33,23 @@ public class GateStarter {
 		try {
 			// parse xml File and apply it
 			Element element = XmlParseUtils.parse(Global.getConfig("xml"));
-			GateBean bean = XmlParseUtils.xmlToBean(element, GateBean.class);
+			GateBean gateBean = XmlParseUtils.xmlToBean(element, GateBean.class);
+			AuthBean authBean = XmlParseUtils.xmlToBean(element, AuthBean.class);
+			LogicBean logicBean = XmlParseUtils.xmlToBean(element, LogicBean.class);
 
 			new Thread(() -> {
-				try {
-					new DefaultGate().startGate(bean.getPort());
-				} catch (CertificateException | SSLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				new DefaultGate().startGate(gateBean.getPort());
 			}).start();
+
+			// new Thread(() ->
+			// DefaultGateAuthServer.startGateAuthConnection(authBean.getIp(),
+			// authBean.getPort()))
+			// .start();
+			//
+			// new Thread(() ->
+			// DefaultGateLogicServer.startGateLogicConnection(logicBean.getIp(),
+			// logicBean.getPort()))
+			// .start();
 
 		} catch (Exception e) {
 

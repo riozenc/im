@@ -28,6 +28,9 @@ public class GateServerHandler extends SimpleChannelInboundHandler<Message> {
 		// TODO 最好加一个通知客户端收到消息的通知
 	}
 
+	/**
+	 * 通道失效，强行关闭等
+	 */
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) {
 		ClientConnectionMap.removeClientConnection(ctx);

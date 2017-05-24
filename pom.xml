@@ -9,7 +9,8 @@
 		<module>im-gate</module>
     <module>protocol</module>
     <module>im-protocol</module>
-  </modules>
+    <module>im-client</module>
+	</modules>
 	<dependencies>
 
 		<dependency>
