@@ -35,19 +35,20 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
 		String passwd = "123";
 		_userId = Long.toString(increased.getAndIncrement());
 
-		// sendCRegister(ctx, _userId, passwd);
-		// sendCLogin(ctx, _userId, passwd);
+		sendCRegister(ctx, _userId, passwd);
+		sendCLogin(ctx, _userId, passwd);
 		sendTest(ctx);
 	}
 
 	void sendTest(ChannelHandlerContext ctx) {
 
-		ByteBuf buf = Unpooled.buffer(8);
-		buf.writeInt(1);
+		ByteBuf buf = Unpooled.buffer(1024);
+
+		buf.writeBytes("FE FE FE 16 10 我来了 16".getBytes());
+
+		// ctx.writeAndFlush("FE FE FE");
 
 		ctx.writeAndFlush(buf);
-
-		// ctx.writeAndFlush(byteBuf);
 	}
 
 	void sendCRegister(ChannelHandlerContext ctx, String userid, String passwd) {

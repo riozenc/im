@@ -67,6 +67,8 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		int ptoNum = in.readInt();
 
 		try {
+			
+			//消息体转对象
 
 			// 解密消息体
 			// ThreeDES des = ctx.channel().attr(ClientAttr.ENCRYPT).get();
