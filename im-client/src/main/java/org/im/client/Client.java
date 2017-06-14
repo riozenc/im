@@ -5,8 +5,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import protobuf.ParseRegistryMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +50,7 @@ public class Client {
 			public void operationComplete(ChannelFuture future) throws Exception {
 				if (future.isSuccess()) {
 					// init registry
-					ParseRegistryMap.initRegistry();
+					
 					logger.info("Client[{}] connected Gate Successed...", index);
 				} else {
 					logger.error("Client[{}] connected Gate Failed", index);

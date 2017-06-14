@@ -25,7 +25,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		// TODO Auto-generated method stub
 
 		in.markReaderIndex();
-
+		in.array();
 		int length = in.readableBytes();
 
 //		if (in.readableBytes() < 6) {

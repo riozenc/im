@@ -5,13 +5,11 @@
 **/
 package org.im.protocol.code;
 
-import org.im.protocol.analysis.ParseMap;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
@@ -23,17 +21,14 @@ public class PacketEncoder extends MessageToByteEncoder<Message> {
 		// TODO Auto-generated method stub
 
 		byte[] bytes = msg.toByteArray();// 将对象转换为byte
-		int ptoNum = ParseMap.msg2ptoNum.get(msg);
+
+		// int ptoNum = ParseMap.msg2ptoNum.get(msg);
 		int length = bytes.length;
 
-		ByteBuf buf = Unpooled.buffer(8 + length);
-		buf.writeInt(length);
-		buf.writeInt(ptoNum);
-		buf.writeBytes(bytes);
-		out.writeBytes(buf);
+		out.writeBytes(bytes);
 
-		logger.info("GateServer Send Message, remoteAddress: {}, content length {}, ptoNum: {}",
-				ctx.channel().remoteAddress(), length, ptoNum);
+		logger.info("GateServer Send Message, remoteAddress: {}, content length {}", ctx.channel().remoteAddress(),
+				length);
 	}
 
 }
