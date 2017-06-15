@@ -7,7 +7,7 @@ package org.im.protocol.bean;
 
 import org.im.protocol.msg.AbstractMessage;
 
-import com.riozenc.quicktool.common.util.xml.XmlParseUtils;
+import com.riozenc.quicktool.common.util.xml.XmlUtils;
 
 public class LoginBean extends AbstractMessage {
 	private String userId;
@@ -32,9 +32,19 @@ public class LoginBean extends AbstractMessage {
 	@Override
 	public byte[] toByte() {
 		// TODO Auto-generated method stub
-		
-		
-		return "".getBytes();
+		String data = XmlUtils.object2xml(this);
+		return data.getBytes();
+	}
+
+	public static void main(String[] args) {
+		LoginBean loginBean = new LoginBean();
+		loginBean.setPassword("123");
+		loginBean.setUserId("czy");
+
+		byte[] bs = loginBean.toByte();
+
+		System.out.println(new String(bs));
+
 	}
 
 }
