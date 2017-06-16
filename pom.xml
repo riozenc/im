@@ -10,7 +10,10 @@
     <module>protocol</module>
     <module>im-protocol</module>
     <module>im-client</module>
-	</modules>
+    <module>im-auth</module>
+    <module>im-logic</module>
+    <module>ims</module>
+  </modules>
 	<dependencies>
 
 		<dependency>

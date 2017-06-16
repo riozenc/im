@@ -7,17 +7,11 @@
  */
 package org.im.gate.starter;
 
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLException;
-
 import org.dom4j.Element;
 import org.im.gate.bean.AuthBean;
 import org.im.gate.bean.GateBean;
 import org.im.gate.bean.LogicBean;
 import org.im.gate.server.DefaultGate;
-import org.im.gate.server.DefaultGateAuthServer;
-import org.im.gate.server.DefaultGateLogicServer;
 
 import com.riozenc.quicktool.common.util.xml.XmlParseUtils;
 import com.riozenc.quicktool.config.Global;

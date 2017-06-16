@@ -9,5 +9,5 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public abstract class AbstractGate implements IGate {
-	protected Logger logger = LogManager.getLogger();
+	protected static Logger logger = LogManager.getLogger();
 }

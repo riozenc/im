@@ -7,14 +7,12 @@
     <artifactId>im</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.riozenc.wisdom.protocol</groupId>
-  <artifactId>im-protocol</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
-  <name>im-protocol</name>
+  <groupId>com.riozenc.wisdom.ims</groupId>
+  <artifactId>ims</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>ims Maven Webapp</name>
   <url>http://maven.apache.org</url>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -23,4 +21,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <build>
+    <finalName>ims</finalName>
+  </build>
 </project>

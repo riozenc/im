@@ -8,10 +8,10 @@
 		<artifactId>im</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>org.im.client</groupId>
-	<artifactId>im-client</artifactId>
+	<groupId>com.riozenc.wisdom.logic</groupId>
+	<artifactId>im-logic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>im-client</name>
+	<name>im-logic</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,23 +25,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>4.1.9.Final</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
-		</dependency>
-
-
-		<dependency>
 			<groupId>com.riozenc.wisdom.protocol</groupId>
 			<artifactId>im-protocol</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
-
 	</dependencies>
 </project>
