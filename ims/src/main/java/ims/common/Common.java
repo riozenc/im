@@ -6,5 +6,6 @@
 package ims.common;
 
 public class Common {
-
+	public static final int SUCCESS = 200;
+	public static final int FAILD = 300;
 }
