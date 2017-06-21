@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ims.webapp.acc.dao.DepartmentDAO">
+	<select id="findByKey" parameterType="DepartmentDomain"
+		resultType="DepartmentDomain" useCache="true">
+		select ID,NAME,PARENT_ID,FUNCTION,REMARK,STATUS from DEPARTMENT_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="DepartmentDomain"
+		resultType="DepartmentDomain" useCache="true">
+		select ID,NAME,PARENT_ID,FUNCTION,REMARK,STATUS from DEPARTMENT_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="name !=null">
+				and NAME = #{name}
+			</if>
+			<if test="parentId !=null">
+				and PARENT_ID = #{parentId}
+			</if>
+			<if test="function !=null">
+				and FUNCTION = #{function}
+			</if>
+			<if test="remark !=null">
+				and REMARK = #{remark}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="DepartmentDomain" flushCache="true">
+		insert into DEPARTMENT_INFO(ID,NAME,PARENT_ID,FUNCTION,REMARK,STATUS)
+		values (#{id},#{name},#{parentId},#{function},#{remark},#{status})
+	</insert>
+	<update id="update" parameterType="DepartmentDomain" flushCache="true">
+		update DEPARTMENT_INFO
+		<set>
+			<if test="id !=null">
+				ID = #{id},
+			</if>
+			<if test="name !=null">
+				NAME = #{name},
+			</if>
+			<if test="parentId !=null">
+				PARENT_ID = #{parentId},
+			</if>
+			<if test="function !=null">
+				FUNCTION = #{function},
+			</if>
+			<if test="remark !=null">
+				REMARK = #{remark},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+		</where>
+	</update>
+	<delete id="delete" parameterType="DepartmentDomain" flushCache="true">
+		delete from DEPARTMENT_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+		</where>
+	</delete>
+
+
+	<select id="getDeparmentByCompany" parameterType="CompanyDomain"
+		resultType="DepartmentDomain" useCache="true">
+		SELECT b.* FROM company_department_rel a LEFT JOIN department_info b
+		on b.ID = a.DEPARTMENT_ID
+		<where>
+			a.COMPANY_ID=#{id}
+		</where>
+	</select>
+</mapper>

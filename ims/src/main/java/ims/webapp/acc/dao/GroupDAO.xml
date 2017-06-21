@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ims.webapp.acc.dao.GroupDAO">
+	<select id="findByKey" parameterType="GroupDomain" resultType="GroupDomain"
+		useCache="true">
+		select ID,GROUP_NO,GROUP_NAME,GROUP_TYPE,STATUS from GROUP_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="groupNo !=null">
+				and GROUP_NO = #{groupNo}
+			</if>
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="GroupDomain" resultType="GroupDomain"
+		useCache="true">
+		select ID,GROUP_NO,GROUP_NAME,GROUP_TYPE,STATUS from GROUP_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="groupNo !=null">
+				and GROUP_NO = #{groupNo}
+			</if>
+			<if test="groupName !=null">
+				and GROUP_NAME = #{groupName}
+			</if>
+			<if test="groupType !=null">
+				and GROUP_TYPE = #{groupType}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="GroupDomain" flushCache="true">
+		insert into GROUP_INFO(ID,GROUP_NO,GROUP_NAME,GROUP_TYPE,STATUS)
+		values (#{id},#{groupNo},#{groupName},#{groupType},#{status})
+	</insert>
+	<update id="update" parameterType="GroupDomain" flushCache="true">
+		update GROUP_INFO
+		<set>
+			<if test="id !=null">
+				ID = #{id},
+			</if>
+			<if test="groupNo !=null">
+				GROUP_NO = #{groupNo},
+			</if>
+			<if test="groupName !=null">
+				GROUP_NAME = #{groupName},
+			</if>
+			<if test="groupType !=null">
+				GROUP_TYPE = #{groupType},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="groupNo !=null">
+				and GROUP_NO = #{groupNo}
+			</if>
+		</where>
+	</update>
+	<delete id="delete" parameterType="GroupDomain" flushCache="true">
+		delete from GROUP_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="groupNo !=null">
+				and GROUP_NO = #{groupNo}
+			</if>
+		</where>
+	</delete>
+
+
+	<select id="findGroupByUser" parameterType="UserDomain"
+		resultType="GroupDomain" useCache="true">
+		SELECT b.* FROM user_group_rel a LEFT JOIN group_info b ON a.GROUP_NO
+		= b.GROUP_NO
+		<where>
+			a.USER_ID = #{id}
+		</where>
+	</select>
+
+</mapper>

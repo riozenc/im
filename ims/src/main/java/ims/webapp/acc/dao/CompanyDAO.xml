@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ims.webapp.acc.dao.CompanyDAO">
+	<select id="findByKey" parameterType="CompanyDomain" resultType="CompanyDomain"
+		useCache="true">
+		select ID,COMPANY_NO,COMPANY_NAME,COMPANY_TYPE,STATUS from
+		COMPANY_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="companyNo !=null">
+				and COMPANY_NO = #{companyNo}
+			</if>
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="CompanyDomain"
+		resultType="CompanyDomain" useCache="true">
+		select ID,COMPANY_NO,COMPANY_NAME,COMPANY_TYPE,STATUS from
+		COMPANY_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="companyNo !=null">
+				and COMPANY_NO = #{companyNo}
+			</if>
+			<if test="companyName !=null">
+				and COMPANY_NAME = #{companyName}
+			</if>
+			<if test="companyType !=null">
+				and COMPANY_TYPE = #{companyType}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="CompanyDomain" flushCache="true">
+		insert into
+		COMPANY_INFO(ID,COMPANY_NO,COMPANY_NAME,COMPANY_TYPE,STATUS) values
+		(#{id},#{companyNo},#{companyName},#{companyType},#{status})
+	</insert>
+	<update id="update" parameterType="CompanyDomain" flushCache="true">
+		update COMPANY_INFO
+		<set>
+			<if test="id !=null">
+				ID = #{id},
+			</if>
+			<if test="companyNo !=null">
+				COMPANY_NO = #{companyNo},
+			</if>
+			<if test="companyName !=null">
+				COMPANY_NAME = #{companyName},
+			</if>
+			<if test="companyType !=null">
+				COMPANY_TYPE = #{companyType},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="companyNo !=null">
+				and COMPANY_NO = #{companyNo}
+			</if>
+		</where>
+	</update>
+	<delete id="delete" parameterType="CompanyDomain" flushCache="true">
+		delete from COMPANY_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="companyNo !=null">
+				and COMPANY_NO = #{companyNo}
+			</if>
+		</where>
+	</delete>
+
+	<select id="getCompanyByUser" parameterType="UserDomain"
+		resultType="CompanyDomain" useCache="true">
+		SELECT
+		a.ID,a.COMPANY_NO,a.COMPANY_NAME,a.COMPANY_TYPE,a.REMARK,a.STATUS
+		FROM
+		COMPANY_INFO a
+		LEFT JOIN user_company_rel b ON b.COMPANY_ID
+		= a.ID
+		<where>
+			b.USER_ID =#{id}
+		</where>
+	</select>
+</mapper>

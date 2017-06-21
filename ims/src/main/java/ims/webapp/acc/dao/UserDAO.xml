@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ims.webapp.acc.dao.UserDAO">
+	<select id="findByKey" parameterType="UserDomain" resultType="UserDomain"
+		useCache="true">
+		select ID,USER_ID,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
+		from USER_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="userId !=null">
+				and USER_ID = #{userId}
+			</if>
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="UserDomain" resultType="UserDomain"
+		useCache="true">
+		select ID,USER_ID,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
+		from USER_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="userId !=null">
+				and USER_ID = #{userId}
+			</if>
+			<if test="phone !=null">
+				and PHONE = #{phone}
+			</if>
+			<if test="mailAddress !=null">
+				and MAIL_ADDRESS = #{mailAddress}
+			</if>
+			<if test="userName !=null">
+				and USER_NAME = #{userName}
+			</if>
+			<if test="sex !=null">
+				and SEX = #{sex}
+			</if>
+			<if test="imageUrl !=null">
+				and IMAGE_URL = #{imageUrl}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="UserDomain" flushCache="true">
+		insert into
+		USER_INFO(ID,USER_ID,PASSWORD,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS)
+		values
+		(#{id},#{userId},#{password},#{phone},#{mailAddress},#{userName},#{sex},#{imageUrl},#{remark},#{status})
+	</insert>
+	<update id="update" parameterType="UserDomain" flushCache="true">
+		update USER_INFO
+		<set>
+			<if test="id !=null">
+				ID = #{id},
+			</if>
+			<if test="userId !=null">
+				USER_ID = #{userId},
+			</if>
+			<if test="phone !=null">
+				PHONE = #{phone},
+			</if>
+			<if test="mailAddress !=null">
+				MAIL_ADDRESS = #{mailAddress},
+			</if>
+			<if test="userName !=null">
+				USER_NAME = #{userName},
+			</if>
+			<if test="sex !=null">
+				SEX = #{sex},
+			</if>
+			<if test="imageUrl !=null">
+				IMAGE_URL = #{imageUrl},
+			</if>
+			<if test="remark !=null">
+				REMARK = #{remark},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="userId !=null">
+				and USER_ID = #{userId}
+			</if>
+		</where>
+	</update>
+	<delete id="delete" parameterType="UserDomain" flushCache="true">
+		delete from USER_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="userId !=null">
+				and USER_ID = #{userId}
+			</if>
+		</where>
+	</delete>
+
+
+	<select id="getUser" parameterType="UserDomain" resultType="UserDomain"
+		useCache="false" flushCache="true">
+		select
+		ID,USER_ID,PASSWORD,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
+		from USER_INFO
+		<where>
+			<if test="userId !=null">
+				and USER_ID = #{userId}
+			</if>
+			<if test="phone !=null">
+				and PHONE = #{phone}
+			</if>
+			<if test="mailAddress !=null">
+				and MAIL_ADDRESS = #{mailAddress}
+			</if>
+		</where>
+	</select>
+
+	<select id="findUserByCompany" parameterType="CompanyDomain"
+		resultType="UserDomain">
+		SELECT
+		b.ID,b.USER_ID,b.PHONE,b.MAIL_ADDRESS,b.USER_NAME,b.SEX,b.IMAGE_URL,b.REMARK,b.STATUS,c.DEPARTMENT_ID
+		FROM user_company_rel a LEFT JOIN user_info
+		b ON a.USER_ID = b.ID LEFT
+		JOIN user_department_rel c ON a.USER_ID =
+		c.USER_ID
+		<where>
+			a.COMPANY_ID = #{id}
+		</where>
+	</select>
+
+
+	<select id="findUserByGroup" parameterType="GroupDomain"
+		resultType="UserDomain">
+		SELECT
+		b.ID,
+		b.USER_ID,
+		b.PHONE,
+		b.MAIL_ADDRESS,
+		b.USER_NAME,
+		b.SEX,
+		b.IMAGE_URL,
+		b. STATUS,
+		a.REMARK
+		FROM
+		user_group_rel a
+		LEFT JOIN user_info
+		b ON a.USER_ID = b.ID
+		<where>
+			a.GROUP_NO = #{groupNo}
+		</where>
+	</select>
+
+</mapper>
