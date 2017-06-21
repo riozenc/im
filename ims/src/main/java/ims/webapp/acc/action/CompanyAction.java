@@ -36,6 +36,12 @@ public class CompanyAction extends BaseAction {
 	@Qualifier("companyServiceImpl")
 	private ICompanyService companyService;
 
+	@Override
+	public String getIndex() {
+		// TODO Auto-generated method stub
+		return "company.jsp";
+	}
+
 	@ResponseBody
 	@RequestMapping(params = "type=insert")
 	public String insert(CompanyDomain companyInfoVO) {

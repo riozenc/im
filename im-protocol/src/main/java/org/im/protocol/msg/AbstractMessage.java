@@ -55,7 +55,7 @@ public abstract class AbstractMessage implements Message {
 	}
 
 	@Override
-	public byte[] toByteArray() {
+	public byte[] message2Byte() {
 		// TODO Auto-generated method stub
 
 		// 组装数据

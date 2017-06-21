@@ -40,6 +40,12 @@ public class UserAction extends BaseAction {
 	@Qualifier("userServiceImpl")
 	private IUserService userService;
 
+	@Override
+	public String getIndex() {
+		// TODO Auto-generated method stub
+		return "user.jsp";
+	}
+
 	@ResponseBody
 	@RequestMapping(params = "type=insert")
 	public String insert(UserDomain userDomain) {

@@ -18,7 +18,7 @@ public class PacketEncoder extends MessageToByteEncoder<Message> {
 	protected void encode(ChannelHandlerContext ctx, Message msg, ByteBuf out) throws Exception {
 		// TODO Auto-generated method stub
 
-		byte[] bytes = msg.toByteArray();// 将对象转换为byte
+		byte[] bytes = msg.message2Byte();// 将对象转换为byte
 
 		// int ptoNum = ParseMap.msg2ptoNum.get(msg);
 		int length = bytes.length;

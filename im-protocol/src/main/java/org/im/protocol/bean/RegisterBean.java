@@ -5,7 +5,11 @@
 **/
 package org.im.protocol.bean;
 
-public class RegisterBean {
+import org.im.protocol.msg.AbstractMessage;
+
+import com.riozenc.quicktool.common.util.xml.XmlUtils;
+
+public class RegisterBean extends AbstractMessage {
 	private String userId;
 	private String password;
 
@@ -23,6 +27,13 @@ public class RegisterBean {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public byte[] toByte() {
+		// TODO Auto-generated method stub
+		String data = XmlUtils.object2xml(this);
+		return data.getBytes();
 	}
 
 }

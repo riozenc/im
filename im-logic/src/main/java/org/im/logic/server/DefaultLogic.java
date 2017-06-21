@@ -23,8 +23,8 @@ public class DefaultLogic implements ILogic {
 	@Override
 	public void startLogic(int port) throws Exception {
 		// TODO Auto-generated method stub
-		 EventLoopGroup bossGroup = new NioEventLoopGroup();
-	        EventLoopGroup workGroup = new NioEventLoopGroup();
+		EventLoopGroup bossGroup = new NioEventLoopGroup();
+		EventLoopGroup workGroup = new NioEventLoopGroup();
 	}
 
 }

@@ -31,6 +31,12 @@ public class GroupAction extends BaseAction {
 	@Qualifier("groupServiceImpl")
 	private IGroupService groupservice;
 
+	@Override
+	public String getIndex() {
+		// TODO Auto-generated method stub
+		return "group.jsp";
+	}
+	
 	@ResponseBody
 	@RequestMapping(params = "type=getGroupByUser")
 	public String getGroupByUser() {

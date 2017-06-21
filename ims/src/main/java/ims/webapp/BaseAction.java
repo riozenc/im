@@ -5,6 +5,14 @@
 **/
 package ims.webapp;
 
-public class BaseAction extends com.riozenc.quicktool.springmvc.webapp.action.BaseAction {
+import org.springframework.web.bind.annotation.RequestMapping;
+
+public abstract class BaseAction extends com.riozenc.quicktool.springmvc.webapp.action.BaseAction {
+	@RequestMapping(params = "type=index")
+	public String index() {
+		return getIndex();
+	}
+
+	public abstract String getIndex();
 
 }

@@ -36,6 +36,12 @@ public class DepartmentAction extends BaseAction {
 	@Autowired
 	@Qualifier("departmentServiceImpl")
 	private IDepartmentService departmentService;
+	
+	@Override
+	public String getIndex() {
+		// TODO Auto-generated method stub
+		return "department.jsp";
+	}
 
 	@RequestMapping(params = "type=insert")
 	public String insert(DepartmentDomain departmentDomain) {
