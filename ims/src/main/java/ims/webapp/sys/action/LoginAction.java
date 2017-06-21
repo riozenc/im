@@ -10,6 +10,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
+import org.im.protocol.bean.RegisterBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.riozenc.quicktool.common.util.StringUtils;
 import com.riozenc.quicktool.common.util.xml.XmlUtils;
 
+import ims.client.Client;
+import ims.client.ClientRegisterBean;
 import ims.common.Common;
 import ims.common.security.Principal;
 import ims.common.security.filter.PasswordShiroFilter;
@@ -43,6 +46,7 @@ public class LoginAction {
 			}
 
 			// im通讯服务器进行注册请求
+			Client.writeAndFlush(new RegisterBean());
 
 			return XmlUtils.object2xml(new XmlResultBean(Common.SUCCESS, XmlUtils.object2xml(principal.getUser())));
 		} else {

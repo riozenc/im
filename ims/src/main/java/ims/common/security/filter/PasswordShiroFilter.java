@@ -4,7 +4,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -27,9 +26,6 @@ public class PasswordShiroFilter extends FormAuthenticationFilter {
 	@Override
 	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
 		// TODO Auto-generated method stub
-
-		Subject subject = SecurityUtils.getSubject();
-		System.out.println(subject.getPrincipal());
 
 		String username = getUsername(request);
 		String password = getPassword(request);
