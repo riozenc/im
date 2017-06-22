@@ -5,6 +5,8 @@
 **/
 package org.im.protocol.msg;
 
+import com.riozenc.quicktool.config.Global;
+
 /**
  * 消息体的基本功能，提供部分获取数据的方法和协议对象的转化
  * 
@@ -13,14 +15,15 @@ package org.im.protocol.msg;
  */
 public abstract class AbstractMessage implements Message {
 
-	private byte[] heads;// 头 长度3
+	private byte[] heads = { (byte) 254, (byte) 254, (byte) 254 };// 头 长度3
 	private byte version;// 协议版本 长度1
-	private byte[] crc;// 校验 长度2
-	private byte encryption;// 加密方式 长度1
-	private byte[] order;// 命令 长度4
-	private byte[] length;// 数据长度 长度4
+	private byte[] order = new byte[4];// 命令 长度4
+	private byte[] length = new byte[4];// 数据长度 长度4
 	private byte[] data;// 数据 长度等于length
-	private byte[] date;// 数据时间 长度4
+	private byte[] date = new byte[4];// 数据时间 长度4
+	private byte encryption;// 加密方式 长度1
+	private byte[] crc = new byte[3];// 校验 长度2
+	private byte end = (byte) 254;// 结束符
 
 	public byte[] getHeads() {
 		return heads;
@@ -54,11 +57,19 @@ public abstract class AbstractMessage implements Message {
 		return date;
 	}
 
+	public byte getEnd() {
+		return end;
+	}
+
 	@Override
 	public byte[] message2Byte() {
 		// TODO Auto-generated method stub
 
-		// 组装数据
+		// 版本号
+		version = Byte.parseByte(Global.getConfig("protocol-version"));
+
+		// 对象变数据
+		this.data = toByte();
 
 		return null;
 	}
@@ -73,4 +84,5 @@ public abstract class AbstractMessage implements Message {
 	}
 
 	public abstract byte[] toByte();
+
 }

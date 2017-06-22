@@ -35,15 +35,11 @@ public class GateStarter {
 				new DefaultGate().startGate(gateBean.getPort());
 			}).start();
 
-			// new Thread(() ->
-			// DefaultGateAuthServer.startGateAuthConnection(authBean.getIp(),
-			// authBean.getPort()))
-			// .start();
-			//
-			// new Thread(() ->
-			// DefaultGateLogicServer.startGateLogicConnection(logicBean.getIp(),
-			// logicBean.getPort()))
-			// .start();
+//			new Thread(() -> DefaultGateAuthServer.startGateAuthConnection(authBean.getIp(), authBean.getPort()))
+//					.start();
+//
+//			new Thread(() -> DefaultGateLogicServer.startGateLogicConnection(logicBean.getIp(), logicBean.getPort()))
+//					.start();
 
 		} catch (Exception e) {
 

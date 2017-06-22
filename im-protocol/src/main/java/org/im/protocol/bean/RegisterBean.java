@@ -10,6 +10,7 @@ import org.im.protocol.msg.AbstractMessage;
 import com.riozenc.quicktool.common.util.xml.XmlUtils;
 
 public class RegisterBean extends AbstractMessage {
+
 	private String userId;
 	private String password;
 
