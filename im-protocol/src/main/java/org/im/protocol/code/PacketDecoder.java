@@ -28,18 +28,18 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		in.array();
 		int length = in.readableBytes();
 
-//		if (in.readableBytes() < 6) {
-//			logger.info("readableBytes length less than 6 bytes, ignored");
-//			in.resetReaderIndex();
-//			return;
-//		}
+		// if (in.readableBytes() < 6) {
+		// logger.info("readableBytes length less than 6 bytes, ignored");
+		// in.resetReaderIndex();
+		// return;
+		// }
 
 		ByteBuf byteBuf = Unpooled.buffer(length);
 
 		in.readBytes(byteBuf);
 
 		byte[] bs = byteBuf.array();// 获取数据
-		
+
 		System.out.println(new String(bs));
 
 		if (in.readableBytes() < 4) {
@@ -62,43 +62,24 @@ public class PacketDecoder extends ByteToMessageDecoder {
 			return;
 		}
 
-		// 长度判断
-
-		int ptoNum = in.readInt();
+		String order = null;
 
 		try {
-			
-			//消息体转对象
+
+			// 消息体转对象
 
 			// 解密消息体
 			// ThreeDES des = ctx.channel().attr(ClientAttr.ENCRYPT).get();
 			// byte[] bareByte = des.decrypt(inByte);
 
 			byte[] body = byteBuf.array();
-
-			Message msg = ParseMap.getMessage(ptoNum, body);
+			Message msg = ParseMap.getMessage(order, body);
 			out.add(msg);
-			logger.info("GateServer Received Message: content length {}, ptoNum: {}", length, ptoNum);
+			logger.info("GateServer Received Message: content length {}, order: {}", length, order);
 
 		} catch (Exception e) {
 			logger.error(ctx.channel().remoteAddress() + ",decode failed.", e);
 		}
-	}
-
-	public static void main(String[] args) {
-		System.out.println(0x16);
-		System.out.println(0x10);
-		System.out.println(0xFE);
-		System.out.println(0x0221);
-		int i = 0x0221;
-
-		String s = Integer.toHexString(i);
-
-		System.out.println(s);
-
-		System.out.println(s.getBytes());
-		byte v = Integer.valueOf(s, 16).byteValue();
-		System.out.println(v);
 	}
 
 }

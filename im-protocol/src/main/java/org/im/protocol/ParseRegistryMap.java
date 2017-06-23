@@ -8,19 +8,14 @@ package org.im.protocol;
 import java.io.IOException;
 
 import org.im.protocol.analysis.ParseMap;
+import org.im.protocol.bean.RegisterBean;
 
 public class ParseRegistryMap {
-	public static final int GTRANSFER = 900;
-	public static final int GREET = 901;
-	public static final int CLOGIN = 1000;
-
-	public static final int CREGISTER = 1001;
-	public static final int SRESPONSE = 1002;
-	public static final int CPRIVATECHAT = 1003;
-	public static final int SPRIVATECHAT = 1004;
+	public static final String CLIENT_REGISTER = "0900";
 
 	public static void initRegistry() throws IOException {
-//		ParseMap.register(900, Internal.GTransfer::parseFrom, Internal.GTransfer.class); // 内部传输协议用
-//		ParseMap.register(900, parse, cla);
+		ParseMap.register(CLIENT_REGISTER, RegisterBean.class);//内部协议
+
 	}
+
 }

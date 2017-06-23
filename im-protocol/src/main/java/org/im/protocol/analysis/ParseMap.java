@@ -7,7 +7,9 @@ package org.im.protocol.analysis;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.im.protocol.msg.AbstractMessage;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,40 +22,43 @@ public class ParseMap {
 		Message process(byte[] bytes) throws IOException;
 	}
 
-	public static HashMap<Integer, ParseMap.Parsing> parseMap = new HashMap<>();
-	public static HashMap<Class<?>, Integer> msg2ptoNum = new HashMap<>();
+	private static HashMap<String, Class<? extends AbstractMessage>> parseMap = new HashMap<>();
+	public static HashMap<Class<? extends AbstractMessage>, String> msg2Order = new HashMap<>();
 
-	public static void register(int ptoNum, ParseMap.Parsing parse, Class<?> cla) {
-		if (parseMap.get(ptoNum) == null)
-			parseMap.put(ptoNum, parse);
+	public static void register(String order, Class<? extends AbstractMessage> clazz) {
+		if (parseMap.get(order) == null)
+			parseMap.put(order, clazz);
 		else {
-			logger.error("pto has been registered in parseMap, ptoNum: {}", ptoNum);
+			logger.error(clazz + " has been registered in parseMap, order: {}", order);
 			return;
 		}
 
-		if (msg2ptoNum.get(cla) == null)
-			msg2ptoNum.put(cla, ptoNum);
+		if (msg2Order.get(clazz) == null)
+			msg2Order.put(clazz, order);
 		else {
-			logger.error("pto has been registered in msg2ptoNum, ptoNum: {}", ptoNum);
+			logger.error(clazz + " has been registered in msg2ptoNum, order: {}", order);
 			return;
 		}
 	}
 
-	public static Message getMessage(int ptoNum, byte[] bytes) throws IOException {
-		Parsing parser = parseMap.get(ptoNum);
-		if (parser == null) {
-			logger.error("UnKnown Protocol Num: {}", ptoNum);
+	public static Message getMessage(String order, byte[] bytes) throws IOException, InstantiationException, IllegalAccessException {
+		Class<? extends AbstractMessage> clazz  = parseMap.get(order);
+		if (clazz == null) {
+			logger.error("UnKnown Protocol order: {}", order);
 		}
-		Message msg = parser.process(bytes);
+		
+		AbstractMessage abstractMessage = clazz.newInstance();
+		
+		Message msg = abstractMessage.byte2Message(bytes);
 
 		return msg;
 	}
 
-	public static Integer getPtoNum(Message msg) {
-		return getPtoNum(msg.getClass());
-	}
-
-	public static Integer getPtoNum(Class<?> clz) {
-		return msg2ptoNum.get(clz);
+//	public static Integer getPtoNum(Message msg) {
+//		return getPtoNum(msg.getClass());
+//	}
+//
+	public static String  getOrder(Class<?> clz) {
+		return msg2Order.get(clz);
 	}
 }

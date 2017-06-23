@@ -15,7 +15,7 @@ import com.riozenc.quicktool.config.Global;
  */
 public abstract class AbstractMessage implements Message {
 
-	private byte[] heads = { (byte) 254, (byte) 254, (byte) 254 };// 头 长度3
+	private static final byte[] heads = { (byte) 254, (byte) 254, (byte) 254 };// 头 长度3
 	private byte version;// 协议版本 长度1
 	private byte[] order = new byte[4];// 命令 长度4
 	private byte[] length = new byte[4];// 数据长度 长度4
@@ -80,7 +80,7 @@ public abstract class AbstractMessage implements Message {
 
 		// 数据变对象
 
-		return null;
+		return this;
 	}
 
 	public abstract byte[] toByte();
