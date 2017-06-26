@@ -17,10 +17,10 @@ public abstract class AbstractMessage implements Message {
 
 	private static final byte[] heads = { (byte) 254, (byte) 254, (byte) 254 };// 头 长度3
 	private byte version;// 协议版本 长度1
-	private byte[] order = new byte[4];// 命令 长度4
+	private byte[] order = new byte[4];// 命令 长度4 会补0
 	private byte[] length = new byte[4];// 数据长度 长度4
 	private byte[] data;// 数据 长度等于length
-	private byte[] date = new byte[4];// 数据时间 长度4
+	private byte[] date = new byte[4];// 数据时间 长度4  !!4不够
 	private byte encryption;// 加密方式 长度1
 	private byte[] crc = new byte[3];// 校验 长度2
 	private byte end = (byte) 254;// 结束符
