@@ -7,6 +7,7 @@ package org.im.protocol.msg;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.im.protocol.analysis.ParseMap;
 
 import com.riozenc.quicktool.config.Global;
@@ -43,7 +44,7 @@ public class DataPackageTool {
 	}
 
 	/**
-	 * 拆分字符串 eg:(123,3) -->{00,01,23}
+	 * 拆分字符串 eg:(123,2) -->{01,23}
 	 * 
 	 * data 只能为数字
 	 * 
@@ -54,24 +55,36 @@ public class DataPackageTool {
 	private static byte[] string2byte(String data, int length) {
 		byte[] bs = new byte[length];
 		char[] cs = data.toCharArray();
-		for (int i = 0; i < cs.length; i++) {
-			bs[bs.length - i - 1] = (byte) cs[cs.length - i - 1];
+		StringBuilder stringBuilder = new StringBuilder(data);
+		if (data.length() % 2 == 0) {
+			// 偶数
+		} else {
+			// 奇数
+			stringBuilder.insert(0, "0");
 		}
+//保证是偶数,进行进一步拆分
+//		for (int i = 0; i < (cs.length + 1) / 2; i++) {
+//			if (cs.length == 1) {
+//				bs[bs.length - i - 1] = Byte.parseByte(String.valueOf(cs[cs.length - i - 1]));
+//			} else {
+//				bs[bs.length - i - 1] = Byte
+//						.parseByte(String.valueOf(cs[cs.length - i * 2 - 2] + "" + cs[cs.length - i * 2 - 1]));
+//			}
+//		}
 		return bs;
 	}
 
 	public static void main(String[] args) {
-
-//		byte[] bs = string2byte("5123", 4);
-//
-//		for (byte b : bs) {
-//			System.out.print(b);
-//		}
-		String data ="ab";
-		
-		for (byte b : data.getBytes()) {
-			System.out.print(b);
-		}
-
+		//
+		// byte[] bs = string2byte("9654", 2);
+		//
+		// for (byte b : bs) {
+		// System.out.print(b);
+		// }
+		String a = "1";
+		StringBuilder stringBuilder = new StringBuilder(a);
+		System.out.println(stringBuilder);
+		System.out.println(stringBuilder.insert(0, "0"));
+		System.out.println(stringBuilder);
 	}
 }
