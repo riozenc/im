@@ -22,6 +22,10 @@ public class DataPackageTool {
 	public static byte[] packageMessage(AbstractMessage message) {
 		// 版本号
 		byte version = Byte.parseByte(Global.getConfig("protocol-version"));
+
+		// uuid
+		byte[] uuid = new byte[4];
+
 		// 数据
 		byte[] data = message.toByte();
 
@@ -30,6 +34,10 @@ public class DataPackageTool {
 		String order = ParseMap.getOrder(message.getClass());
 		// String --> byte[]
 		byte[] orderByte = string2byte(order, 4);
+
+		// 时间
+		String date = "17,06,28,16,45,59";
+		byte[] dataByte = string2byte(date, 6);
 
 		return null;
 	}
@@ -47,42 +55,23 @@ public class DataPackageTool {
 		byte[] bs = new byte[length];
 		char[] cs = data.toCharArray();
 		for (int i = 0; i < cs.length; i++) {
-			bs[bs.length-i-1] = (byte) cs[cs.length - i - 1];
+			bs[bs.length - i - 1] = (byte) cs[cs.length - i - 1];
 		}
 		return bs;
 	}
 
 	public static void main(String[] args) {
-		// 1498462908182
-//		53495051
-		byte a = 53;
-		byte b = 49;
-		byte c = 50;
-		byte d = 51;
-//
-		byte[] bs = new byte[4];
-		bs[0] = a;
-		bs[1] = b;
-		bs[2] = c;
-		bs[3] = d;
-		System.out.println(new String(bs));
 
 //		byte[] bs = string2byte("5123", 4);
-//		
-//		for(byte b : bs){
+//
+//		for (byte b : bs) {
 //			System.out.print(b);
 //		}
-//		
+		String data ="ab";
 		
-		
-		// Long time = System.currentTimeMillis();
-		// String t = time.toString();
-		//
-		// System.out.println(new Date(time));
-		//
-		// for (byte b : t.getBytes()) {
-		// System.out.print(b);
-		// }
+		for (byte b : data.getBytes()) {
+			System.out.print(b);
+		}
 
 	}
 }
