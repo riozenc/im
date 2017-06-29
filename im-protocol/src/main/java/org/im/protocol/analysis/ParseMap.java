@@ -7,7 +7,6 @@ package org.im.protocol.analysis;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.im.protocol.msg.AbstractMessage;
 import org.im.protocol.msg.Message;
@@ -22,10 +21,10 @@ public class ParseMap {
 		Message process(byte[] bytes) throws IOException;
 	}
 
-	private static HashMap<String, Class<? extends AbstractMessage>> parseMap = new HashMap<>();
-	public static HashMap<Class<? extends AbstractMessage>, String> msg2Order = new HashMap<>();
+	private static HashMap<Integer, Class<? extends AbstractMessage>> parseMap = new HashMap<>();
+	public static HashMap<Class<? extends AbstractMessage>, Integer> msg2Order = new HashMap<>();
 
-	public static void register(String order, Class<? extends AbstractMessage> clazz) {
+	public static void register(int order, Class<? extends AbstractMessage> clazz) {
 		if (parseMap.get(order) == null)
 			parseMap.put(order, clazz);
 		else {
@@ -41,24 +40,25 @@ public class ParseMap {
 		}
 	}
 
-	public static Message getMessage(String order, byte[] bytes) throws IOException, InstantiationException, IllegalAccessException {
-		Class<? extends AbstractMessage> clazz  = parseMap.get(order);
+	public static Message getMessage(String order, byte[] bytes)
+			throws IOException, InstantiationException, IllegalAccessException {
+		Class<? extends AbstractMessage> clazz = parseMap.get(order);
 		if (clazz == null) {
 			logger.error("UnKnown Protocol order: {}", order);
 		}
-		
+
 		AbstractMessage abstractMessage = clazz.newInstance();
-		
+
 		Message msg = abstractMessage.byte2Message(bytes);
 
 		return msg;
 	}
 
-//	public static Integer getPtoNum(Message msg) {
-//		return getPtoNum(msg.getClass());
-//	}
-//
-	public static String  getOrder(Class<?> clz) {
+	// public static Integer getPtoNum(Message msg) {
+	// return getPtoNum(msg.getClass());
+	// }
+	//
+	public static int getOrder(Class<?> clz) {
 		return msg2Order.get(clz);
 	}
 }
