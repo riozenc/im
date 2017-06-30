@@ -5,6 +5,7 @@
 **/
 package org.im.protocol.msg;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -79,13 +80,31 @@ public class DataPackageTool {
 
 		return bs;
 	}
+	
+	public static byte[] getDate(){
+		
+		byte[] date = new byte[6];
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+		
+		return null;
+	}
 
 	public static void main(String[] args) {
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		calendar.get(Calendar.YEAR);
+		String date = "170628164559";
 
-		int order = 1;
+		byte[] orderByte = string2byte(date, 6);
 		
-		byte[] orderByte = string2byte(Integer.toHexString(order), 4);
 		
+		
+
 		System.out.println(orderByte);
 	}
 }
