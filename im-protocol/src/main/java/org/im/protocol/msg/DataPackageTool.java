@@ -36,10 +36,10 @@ public class DataPackageTool {
 		int order = ParseMap.getOrder(message.getClass());
 		// String --> byte[]
 		byte[] orderByte = string2byte(Integer.toHexString(order), 4);
-
 		// 时间
-		String date = "17,06,28,16,45,59";
-		byte[] dataByte = string2byte(date, 6);
+		byte[] dataByte = getDate();
+		
+		
 
 		return null;
 	}
@@ -67,7 +67,7 @@ public class DataPackageTool {
 		// 二选一
 		// stringBuilder.substring(start, end)
 		// char[] cs =
-		// stringBuilder.toString().toCharArray();//单个处理效率，两个char组合效率下降，不如1
+		// stringBuilder.toString().toCharArray();//单个处理效率，两个char组合效率下降，不如stringBuilder
 
 		int len = stringBuilder.length() / 2;
 		for (int i = 0; i < len; i++) {
@@ -80,31 +80,27 @@ public class DataPackageTool {
 
 		return bs;
 	}
-	
-	public static byte[] getDate(){
-		
+
+	public static byte[] getDate() {
+
 		byte[] date = new byte[6];
-		
+
 		Calendar calendar = Calendar.getInstance();
-		
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		
-		return null;
+
+		date[0] = (byte) (calendar.get(Calendar.YEAR) - 2000);
+		date[1] = (byte) (calendar.get(Calendar.MONTH) + 1);
+		date[2] = (byte) (calendar.get(Calendar.DAY_OF_MONTH));
+		date[3] = (byte) (calendar.get(Calendar.HOUR_OF_DAY));
+		date[4] = (byte) (calendar.get(Calendar.MINUTE));
+		date[5] = (byte) (calendar.get(Calendar.SECOND));
+
+		return date;
 	}
 
 	public static void main(String[] args) {
-		
-		Calendar calendar = Calendar.getInstance();
-		
-		calendar.get(Calendar.YEAR);
-		String date = "170628164559";
-
-		byte[] orderByte = string2byte(date, 6);
-		
-		
-		
-
-		System.out.println(orderByte);
+		byte[] bs = getDate();
+		for (byte b : bs) {
+			System.out.println(b);
+		}
 	}
 }
