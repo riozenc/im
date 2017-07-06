@@ -7,6 +7,7 @@ package org.im.protocol.bean;
 
 import java.io.IOException;
 
+import org.im.protocol.ParseRegistryMap;
 import org.im.protocol.analysis.ParseMap;
 import org.im.protocol.analysis.ParseMap.Parsing;
 import org.im.protocol.msg.AbstractMessage;
@@ -46,6 +47,22 @@ public class RegisterBean extends AbstractMessage implements Parsing {
 	public Message process(byte[] bytes) throws IOException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public static void main(String[] args) {
+		
+		ParseRegistryMap.initRegistry();
+		
+		RegisterBean bean = new RegisterBean();
+		bean.setUserId("chiziyue");
+		bean.setPassword("123123");
+		
+		byte[] bs = bean.message2Byte();
+		
+		for(byte b:bs){
+			System.out.print(b);
+			System.out.print(" s");
+		}
 	}
 
 }

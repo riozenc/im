@@ -13,7 +13,7 @@ import org.im.protocol.bean.RegisterBean;
 public class ParseRegistryMap {
 	public static final int CLIENT_REGISTER = 900;
 
-	public static void initRegistry() throws IOException {
+	public static void initRegistry()  {
 		ParseMap.register(CLIENT_REGISTER, RegisterBean.class);//内部协议
 
 	}

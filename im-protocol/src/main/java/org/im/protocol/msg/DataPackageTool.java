@@ -5,6 +5,7 @@
 **/
 package org.im.protocol.msg;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,24 +25,57 @@ public class DataPackageTool {
 	public static byte[] packageMessage(AbstractMessage message) {
 		// 版本号
 		byte version = Byte.parseByte(Global.getConfig("protocol-version"));
-
 		// uuid
 		byte[] uuid = new byte[4];
 
-		// 数据
-		byte[] data = message.toByte();
-
-		// 数据长度
-		byte[] length = string2byte(String.valueOf(data.length), 4);
 		int order = ParseMap.getOrder(message.getClass());
 		// String --> byte[]
 		byte[] orderByte = string2byte(Integer.toHexString(order), 4);
-		// 时间
-		byte[] dataByte = getDate();
-		
-		
 
+		// 数据
+		byte[] data = message.toByte();
+		// 数据长度
+		byte[] dataLength = string2byte(String.valueOf(data.length), 4);
+
+		// 时间
+		byte[] date = getDate();
+		// 加密方式
+		byte encryption = 0;
+		// 校验码
+		byte[] crc = new byte[3];
+
+		// 组合
+
+		// 算报文长度
+		int length = message.getHeads().length + 1 + uuid.length + orderByte.length + dataLength.length + data.length
+				+ date.length + 1 + crc.length + 1;
+
+		byte[] messageByte = new byte[length];
+		int tempLength = 0;
+		tempLength += copyByte(message.getHeads(), messageByte, tempLength);
+		messageByte[tempLength] = version;
+		tempLength += 1;
+		tempLength += copyByte(uuid, messageByte, tempLength);
+		tempLength += copyByte(orderByte, messageByte, tempLength);
+		tempLength += copyByte(dataLength, messageByte, tempLength);
+		tempLength += copyByte(data, messageByte, tempLength);
+		tempLength += copyByte(date, messageByte, tempLength);
+		messageByte[tempLength] = encryption;
+		tempLength += 1;
+		tempLength += copyByte(crc, messageByte, tempLength);
+		messageByte[tempLength] = message.getEnd();
+		tempLength += 1;
+
+		if (tempLength == length) {
+			// 完整性校验
+			return messageByte;
+		}
 		return null;
+	}
+
+	private static int copyByte(byte[] src, byte[] des, int location) {
+		System.arraycopy(src, 0, des, location, src.length);
+		return src.length;
 	}
 
 	/**
@@ -98,9 +132,15 @@ public class DataPackageTool {
 	}
 
 	public static void main(String[] args) {
-		byte[] bs = getDate();
-		for (byte b : bs) {
-			System.out.println(b);
+		int[] a = { 0, 1 };
+		int[] b = { 2, 3 };
+		int[] c = new int[4];
+
+		System.arraycopy(a, 0, c, 0, a.length);
+		System.arraycopy(b, 0, c, a.length, b.length);
+
+		for (int i : c) {
+			System.out.println(i);
 		}
 	}
 }
