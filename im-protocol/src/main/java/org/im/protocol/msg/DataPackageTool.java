@@ -26,16 +26,17 @@ public class DataPackageTool {
 		// 版本号
 		byte version = Byte.parseByte(Global.getConfig("protocol-version"));
 		// uuid
-		byte[] uuid = new byte[4];
+		byte[] uuid = message.getUuid();
 
 		int order = ParseMap.getOrder(message.getClass());
 		// String --> byte[]
 		byte[] orderByte = string2byte(Integer.toHexString(order), 4);
 
 		// 数据
-		byte[] data = message.toByte();
+		byte[] data = message.toXmlByte();
 		// 数据长度
-		byte[] dataLength = string2byte(String.valueOf(data.length), 4);
+		 byte[] dataLength = string2byte(String.valueOf(data.length), 4);
+//		byte[] dataLength = string2byte(Integer.toHexString(data.length), 4);
 
 		// 时间
 		byte[] date = getDate();
@@ -131,16 +132,4 @@ public class DataPackageTool {
 		return date;
 	}
 
-	public static void main(String[] args) {
-		int[] a = { 0, 1 };
-		int[] b = { 2, 3 };
-		int[] c = new int[4];
-
-		System.arraycopy(a, 0, c, 0, a.length);
-		System.arraycopy(b, 0, c, a.length, b.length);
-
-		for (int i : c) {
-			System.out.println(i);
-		}
-	}
 }

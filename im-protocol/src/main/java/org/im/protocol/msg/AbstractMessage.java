@@ -5,6 +5,8 @@
 **/
 package org.im.protocol.msg;
 
+import org.dom4j.DocumentException;
+
 /**
  * 消息体的基本功能，提供部分获取数据的方法和协议对象的转化
  * 
@@ -19,7 +21,7 @@ public abstract class AbstractMessage implements Message {
 
 	private static final byte[] heads = { (byte) 254, (byte) 254, (byte) 254 };// 头长度3
 	private byte version;// 协议版本 长度1
-	private byte[] uuid = new byte[4];// 指令ID//个人帐号+时间戳
+	private byte[] uuid = new byte[4];// 指令ID//个人帐号
 	private byte[] order = new byte[4];// 命令 长度4 会补0
 	private byte[] length = new byte[4];// 数据长度 长度4
 	private byte[] data;// 数据 长度等于length
@@ -28,43 +30,43 @@ public abstract class AbstractMessage implements Message {
 	private byte[] crc = new byte[3];// 校验 长度2
 	private byte end = (byte) 254;// 结束符
 
-	public byte[] getHeads() {
+	protected byte[] getHeads() {
 		return heads;
 	}
 
-	public byte getVersion() {
+	protected byte getVersion() {
 		return version;
 	}
 
-	public byte[] getUuid() {
+	protected byte[] getUuid() {
 		return uuid;
 	}
 
-	public byte[] getCrc() {
+	protected byte[] getCrc() {
 		return crc;
 	}
 
-	public byte getEncryption() {
+	protected byte getEncryption() {
 		return encryption;
 	}
 
-	public byte[] getOrder() {
+	protected byte[] getOrder() {
 		return order;
 	}
 
-	public byte[] getDataLength() {
+	protected byte[] getDataLength() {
 		return length;
 	}
 
-	public byte[] getData() {
+	protected byte[] getData() {
 		return data;
 	}
 
-	public byte[] getDate() {
+	protected byte[] getDate() {
 		return date;
 	}
 
-	public byte getEnd() {
+	protected byte getEnd() {
 		return end;
 	}
 
@@ -73,7 +75,7 @@ public abstract class AbstractMessage implements Message {
 		// TODO Auto-generated method stub
 
 		// 对象变数据
-		this.data = toByte();
+		this.data = toXmlByte();
 
 		return DataPackageTool.packageMessage(this);
 	}
@@ -81,12 +83,15 @@ public abstract class AbstractMessage implements Message {
 	@Override
 	public Message byte2Message(byte[] bs) {
 		// TODO Auto-generated method stub
-
-		// 数据变对象
-
-		return this;
+		try {
+			return DataXmlTool.xml2Bean(bs, this);
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	public abstract byte[] toByte();
+	public abstract byte[] toXmlByte();
 
 }

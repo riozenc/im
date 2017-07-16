@@ -5,6 +5,9 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+
+import org.im.protocol.ParseRegistryMap;
+import org.im.protocol.analysis.ParseMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +23,7 @@ public class Client {
 	private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
 	public static void main(String[] args) throws Exception {
+		ParseRegistryMap.initRegistry();
 		beginPressTest();
 	}
 
@@ -38,9 +42,11 @@ public class Client {
 				});
 
 		// Start the client.
-		for (int i = 1; i <= clientNum; i++) {
-			startConnection(b, i);
-		}
+//		for (int i = 1; i <= clientNum; i++) {
+//			startConnection(b, i);
+//		}
+		
+		startConnection(b, 1);
 
 	}
 

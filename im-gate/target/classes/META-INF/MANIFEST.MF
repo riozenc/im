@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Built-By: riozenc
+Built-By: rioze
 Class-Path: lib/im-protocol-0.0.2-SNAPSHOT.jar lib/netty-all-4.1.9.Fin
  al.jar lib/quicktool-1.0.2-SNAPSHOT.jar lib/log4j-api-2.2.jar lib/log
  4j-core-2.2.jar lib/cglib-3.1.jar lib/asm-4.2.jar lib/javax.servlet-a
@@ -17,7 +17,7 @@ Class-Path: lib/im-protocol-0.0.2-SNAPSHOT.jar lib/netty-all-4.1.9.Fin
  .3.jar lib/shiro-web-1.3.2.jar lib/shiro-spring-1.3.2.jar lib/shiro-e
  hcache-1.3.2.jar lib/ehcache-core-2.5.3.jar lib/shiro-quartz-1.3.2.ja
  r lib/quartz-1.6.1.jar lib/validation-api-1.1.0.Final.jar
-Build-Jdk: 1.8.0_111
+Build-Jdk: 1.8.0_101
 Created-By: Maven Integration for Eclipse
 Main-Class: org.im.gate.starter.GateStarter
 

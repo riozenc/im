@@ -5,8 +5,6 @@
 **/
 package org.im.protocol;
 
-import java.io.IOException;
-
 import org.im.protocol.analysis.ParseMap;
 import org.im.protocol.bean.RegisterBean;
 

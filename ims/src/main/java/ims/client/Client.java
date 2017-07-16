@@ -27,11 +27,14 @@ public class Client {
 	}
 
 	public static void writeAndFlush(Object object) {
-		CLIENT_CHANNEL.writeAndFlush(object);
+		
+		
+		ChannelFuture channelFuture = CLIENT_CHANNEL.writeAndFlush(object);
+
 	}
 
 	public static void beginPressTest() throws InterruptedException {
-		EventLoopGroup group = new NioEventLoopGroup();
+		EventLoopGroup group = new NioEventLoopGroup(1);
 		Bootstrap b = new Bootstrap();
 		b.group(group).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true)
 				.handler(new ChannelInitializer<SocketChannel>() {
@@ -55,7 +58,6 @@ public class Client {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
 				if (future.isSuccess()) {
-					// ·¢ËÍ×¢²áÏûÏ¢
 					CLIENT_CHANNEL = future.channel();
 					logger.info("Client[{}] connected Gate Successed...");
 				} else {

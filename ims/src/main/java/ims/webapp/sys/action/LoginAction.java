@@ -19,11 +19,11 @@ import com.riozenc.quicktool.common.util.StringUtils;
 import com.riozenc.quicktool.common.util.xml.XmlUtils;
 
 import ims.client.Client;
-import ims.client.ClientRegisterBean;
 import ims.common.Common;
 import ims.common.security.Principal;
 import ims.common.security.filter.PasswordShiroFilter;
 import ims.common.xml.XmlResultBean;
+import ims.webapp.acc.domain.UserDomain;
 
 @ControllerAdvice
 @RequestMapping("loginAction")
@@ -44,9 +44,9 @@ public class LoginAction {
 				// 非法请求
 				return loginFail("IncorrectCredentialsException", httpServletRequest, httpServletResponse);
 			}
-
+			UserDomain userDomain = (UserDomain) principal.getUser();
 			// im通讯服务器进行注册请求
-			Client.writeAndFlush(new RegisterBean());
+			Client.writeAndFlush(createRegister(userDomain));
 
 			return XmlUtils.object2xml(new XmlResultBean(Common.SUCCESS, XmlUtils.object2xml(principal.getUser())));
 		} else {
@@ -92,6 +92,18 @@ public class LoginAction {
 		subject.logout();
 		SecurityUtils.getSecurityManager().logout(subject);
 		return null;
+	}
+
+	/**
+	 * 包装通讯注册类
+	 * 
+	 * @param userDomain
+	 * @return
+	 */
+	private RegisterBean createRegister(UserDomain userDomain) {
+		RegisterBean registerBean = new RegisterBean();
+		registerBean.setUserId(userDomain.getUserId());
+		return registerBean;
 	}
 
 	public static boolean isValidateCodeLogin(String useruame, boolean isFail, boolean clean) {

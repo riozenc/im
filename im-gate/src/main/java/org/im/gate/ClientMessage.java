@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.im.gate.connection.ClientConnection;
 import org.im.gate.handler.GateAuthConnectionHandler;
 import org.im.gate.handler.GateLogicConnectionHandler;
+import org.im.protocol.bean.RegisterBean;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,26 +63,20 @@ public class ClientMessage {
 			return;
 		}
 
-//		if (msg instanceof Chat.CPrivateChat) {
-//			byteBuf = Utils.pack2Server(msg, ParseMap.getPtoNum(msg), conn.getNetId(), Internal.Dest.Logic,
-//					conn.getUserId());
-//		}
+		// if (msg instanceof Chat.CPrivateChat) {
+		// byteBuf = Utils.pack2Server(msg, ParseMap.getPtoNum(msg),
+		// conn.getNetId(), Internal.Dest.Logic,
+		// conn.getUserId());
+		// }
 
 		GateLogicConnectionHandler.getGatelogicConnection().writeAndFlush(byteBuf);
 	}
 
-	public static void transfer2Auth(Message msg, ClientConnection conn) {
-		ByteBuf byteBuf = null;
-//		if (msg instanceof Auth.CLogin) {
-//			String userId = ((Auth.CLogin) msg).getUserid();
-//			byteBuf = Utils.pack2Server(msg, ParseMap.getPtoNum(msg), conn.getNetId(), Internal.Dest.Auth, userId);
-//			ClientConnectionMap.registerUserid(userId, conn.getNetId());
-//		} else if (msg instanceof Auth.CRegister) {
-//			byteBuf = Utils.pack2Server(msg, ParseMap.getPtoNum(msg), conn.getNetId(), Internal.Dest.Auth,
-//					((Auth.CRegister) msg).getUserid());
-//		}
+	public static void transfer2Register(Message msg, ClientConnection conn) {
 
-		GateAuthConnectionHandler.getGateAuthConnection().writeAndFlush(byteBuf);
+		RegisterBean bean = (RegisterBean) msg;
+
+		GateAuthConnectionHandler.getGateAuthConnection().writeAndFlush(bean.message2Byte());
 
 	}
 }

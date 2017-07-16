@@ -7,8 +7,6 @@ import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -19,9 +17,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
 	public static ChannelHandlerContext _gateClientConnection;
 
 	private static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
-	String _userId = "";
 	boolean _verify = false;
-	private static int count = 0;
 
 	public static AtomicLong increased = new AtomicLong(1);
 
@@ -29,20 +25,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
 	public void channelActive(ChannelHandlerContext ctx) throws IOException {
 		_gateClientConnection = ctx;
 
-		_userId = Long.toString(increased.getAndIncrement());
-
-		sendTest(ctx, _userId);
-	}
-
-	void sendTest(ChannelHandlerContext ctx, String userId) {
-		System.out.println(userId);
-		ByteBuf buf = Unpooled.buffer(1024);
-
-		buf.writeBytes("FE FE FE 16 10 我来了 16".getBytes());
-
-		// ctx.writeAndFlush("FE FE FE");
-
-		ctx.writeAndFlush(buf);
 	}
 
 	@Override

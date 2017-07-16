@@ -20,7 +20,7 @@ public class LogicStarter {
 
 	private static void configureAndStart() {
 		try {
-			Element element = XmlParseUtils.parse(Global.getConfig("xml"));
+			Element element = XmlParseUtils.readXml(Global.getConfig("xml"));
 
 			LogicBean logicBean = XmlParseUtils.xmlToBean(element, LogicBean.class);
 

@@ -40,7 +40,7 @@ public class ParseMap {
 		}
 	}
 
-	public static Message getMessage(String order, byte[] bytes)
+	public static Message getMessage(int order, byte[] bytes)
 			throws IOException, InstantiationException, IllegalAccessException {
 		Class<? extends AbstractMessage> clazz = parseMap.get(order);
 		if (clazz == null) {
@@ -54,10 +54,6 @@ public class ParseMap {
 		return msg;
 	}
 
-	// public static Integer getPtoNum(Message msg) {
-	// return getPtoNum(msg.getClass());
-	// }
-	//
 	public static int getOrder(Class<?> clz) {
 		return msg2Order.get(clz);
 	}

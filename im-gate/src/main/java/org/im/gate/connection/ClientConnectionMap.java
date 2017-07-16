@@ -20,7 +20,7 @@ public class ClientConnectionMap {
 	private static ConcurrentHashMap<String, Long> userid2netidMap = new ConcurrentHashMap<>();
 
 	public static ClientConnection getClientConnection(ChannelHandlerContext ctx) {
-		Long netId = ctx.attr(ClientConnection.NETID).get();
+		Long netId = ctx.channel().attr(ClientConnection.NETID).get();
 
 		ClientConnection conn = allClientMap.get(netId);
 		if (conn != null)

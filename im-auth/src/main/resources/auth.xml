@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<gate>
+	<id value="1" />
+
+	<!--waiting for client incoming -->
+	<authbean ip="0.0.0.0" port="9999" />
+</gate>

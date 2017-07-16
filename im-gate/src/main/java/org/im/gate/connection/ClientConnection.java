@@ -20,6 +20,9 @@ public class ClientConnection {
 	ClientConnection(ChannelHandlerContext c) {
 		_netId = netidGenerator.incrementAndGet();
 		_ctx = c;
+		
+		//研究一下
+		c.channel().attr(ClientConnection.NETID).set(_netId);;
 		_ctx.attr(ClientConnection.NETID).set(_netId);
 		
 	}

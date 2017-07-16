@@ -5,8 +5,6 @@
  */
 package ims.common.security;
 
-import java.util.Date;
-
 public class Principal {
 
 //	private String userId; // 登录名
