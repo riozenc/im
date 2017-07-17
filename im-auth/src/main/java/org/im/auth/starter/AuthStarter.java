@@ -32,9 +32,6 @@ public class AuthStarter {
 		Element element = XmlParseUtils.readXml(Global.getConfig("xml"));
 		AuthBean authBean = XmlParseUtils.xmlToBean(element, AuthBean.class);
 		new Thread(() -> AuthServer.startAuthServer(authBean.getPort())).start();
-		// 开启自身服务端
-		// new Thread(() -> {
-		// new DefaultGate().startGate(gateBean.getPort());
-		// }).start();
+
 	}
 }

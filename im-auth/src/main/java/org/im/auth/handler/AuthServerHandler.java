@@ -52,7 +52,6 @@ public class AuthServerHandler extends SimpleChannelInboundHandler<Message> {
 		int order = ParseMap.getOrder(msg.getClass());
 		if (msg instanceof RegisterBean) {
 			RegisterBean registerBean = (RegisterBean) msg;
-
 			IMHandler handler = HandlerManager.getHandler(order, registerBean.getUserId(), msg, ctx);
 			Worker.dispatch(registerBean.getUserId(), handler);
 		}

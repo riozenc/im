@@ -11,7 +11,10 @@ import org.slf4j.LoggerFactory;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
- * Created by win10 on 2017/7/14.
+ * 客户注册处理
+ * 
+ * @author riozenc
+ *
  */
 public class CRegisterHandler extends IMHandler {
 	private static final Logger logger = LoggerFactory.getLogger(CRegisterHandler.class);
@@ -23,12 +26,9 @@ public class CRegisterHandler extends IMHandler {
 	@Override
 	protected void excute(Worker worker) throws Exception {
 		RegisterBean msg = (RegisterBean) _msg;
-
 		String userId = msg.getUserId();
-
 		// 这个userId是有效的
 		UserCache.addUser(userId);
-
 	}
 
 }
