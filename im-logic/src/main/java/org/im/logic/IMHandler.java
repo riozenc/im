@@ -4,9 +4,6 @@ import org.im.protocol.msg.Message;
 
 import io.netty.channel.ChannelHandlerContext;
 
-/**
- * Created by Dell on 2016/3/2.
- */
 public abstract class IMHandler {
 	protected final String _userid;
 	protected final long _netid;

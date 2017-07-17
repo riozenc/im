@@ -1,8 +1,7 @@
-package org.im.auth;
+package org.im.logic;
 
 import io.netty.channel.ChannelHandlerContext;
 
-import org.im.auth.handler.CRegisterHandler;
 import org.im.protocol.analysis.ParseMap;
 import org.im.protocol.bean.RegisterBean;
 import org.im.protocol.msg.Message;
@@ -43,6 +42,6 @@ public class HandlerManager {
 	}
 
 	public static void initHandlers() {
-		HandlerManager.register(RegisterBean.class, CRegisterHandler.class);
+
 	}
 }

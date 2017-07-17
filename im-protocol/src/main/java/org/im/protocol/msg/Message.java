@@ -15,6 +15,8 @@ package org.im.protocol.msg;
  *
  */
 public interface Message {
+	
+	
 
 	byte[] message2Byte();
 

@@ -5,9 +5,9 @@
 **/
 package org.im.logic.starter;
 
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.im.logic.bean.LogicBean;
+import org.im.logic.server.DefaultLogic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +18,21 @@ public class LogicStarter {
 	private static final Logger logger = LoggerFactory.getLogger(LogicStarter.class);
 	public static int workNum = 1;
 
+	public static void main(String[] args) throws Exception {
+		configureAndStart();
+	}
+
 	private static void configureAndStart() {
+
 		try {
 			Element element = XmlParseUtils.readXml(Global.getConfig("xml"));
 
 			LogicBean logicBean = XmlParseUtils.xmlToBean(element, LogicBean.class);
 
+			new Thread(() -> {
+				new DefaultLogic().startLogic(logicBean.getPort());
+			}).start();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

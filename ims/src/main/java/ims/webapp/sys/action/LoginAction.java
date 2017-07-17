@@ -44,9 +44,6 @@ public class LoginAction {
 				// 非法请求
 				return loginFail("IncorrectCredentialsException", httpServletRequest, httpServletResponse);
 			}
-			UserDomain userDomain = (UserDomain) principal.getUser();
-			// im通讯服务器进行注册请求
-			Client.writeAndFlush(createRegister(userDomain));
 
 			return XmlUtils.object2xml(new XmlResultBean(Common.SUCCESS, XmlUtils.object2xml(principal.getUser())));
 		} else {

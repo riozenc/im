@@ -6,5 +6,5 @@
 package org.im.logic.server;
 
 public interface ILogic {
-	void startLogic(int port) throws Exception;
+	void startLogic(int port);
 }
