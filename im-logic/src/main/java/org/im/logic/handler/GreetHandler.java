@@ -11,8 +11,6 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class GreetHandler extends IMHandler {
 	private static final Logger logger = LoggerFactory.getLogger(GreetHandler.class);
-	private static final int AUTH = 0;
-	private static final int LOGIC = 1;
 
 	public GreetHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
 		super(userid, netid, msg, ctx);
@@ -21,11 +19,12 @@ public class GreetHandler extends IMHandler {
 	@Override
 	protected void excute(Worker worker) {
 		GreetBean msg = (GreetBean) _msg;
-		if (msg.getType() == AUTH) {
-			LogicServerHandler.setAuthLogicConnection(_ctx);
+
+		if (msg.getType() == GreetBean.GREET_AUTH) {
+			LogicServerHandler.setAuthLogicChannelHandlerContext(_ctx);
 			logger.info("[Auth-Logic] connection is established");
-		} else if (msg.getType() == LOGIC) {
-			LogicServerHandler.setGateLogicConnection(_ctx);
+		} else if (msg.getType() == GreetBean.GREET_LOGIC) {
+			LogicServerHandler.setGateLogicChannelHandlerContext(_ctx);
 			logger.info("[Gate-Logic] connection is established");
 		}
 	}

@@ -15,10 +15,10 @@ package org.im.protocol.msg;
  *
  */
 public interface Message {
-	
-	
 
 	byte[] message2Byte();
 
 	public Message byte2Message(byte[] bs);
+
+	public String getUserId();
 }

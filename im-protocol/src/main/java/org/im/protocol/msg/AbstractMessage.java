@@ -5,7 +5,11 @@
 **/
 package org.im.protocol.msg;
 
+import java.io.IOException;
+
 import org.dom4j.DocumentException;
+
+import com.riozenc.quicktool.common.util.xml.XmlUtils;
 
 /**
  * 消息体的基本功能，提供部分获取数据的方法和协议对象的转化
@@ -73,10 +77,8 @@ public abstract class AbstractMessage implements Message {
 	@Override
 	public byte[] message2Byte() {
 		// TODO Auto-generated method stub
-
 		// 对象变数据
 		this.data = toXmlByte();
-
 		return DataPackageTool.packageMessage(this);
 	}
 
@@ -92,6 +94,15 @@ public abstract class AbstractMessage implements Message {
 		}
 	}
 
-	public abstract byte[] toXmlByte();
+	public byte[] toXmlByte() {
+		// TODO Auto-generated method stub
+		String data = XmlUtils.object2xml(this);
+		return data.getBytes();
+	}
+
+	public Message process(byte[] bytes) throws IOException {
+		// TODO Auto-generated method stub
+		return byte2Message(bytes);
+	}
 
 }

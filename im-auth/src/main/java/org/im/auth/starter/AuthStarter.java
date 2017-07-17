@@ -10,7 +10,9 @@ package org.im.auth.starter;
 import org.dom4j.Element;
 import org.im.auth.Worker;
 import org.im.auth.bean.AuthBean;
+import org.im.auth.bean.LogicBean;
 import org.im.auth.server.AuthServer;
+import org.im.auth.server.DefaultAuthLogicServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,10 @@ public class AuthStarter {
 	private static void configureAndStart() throws Exception {
 		Element element = XmlParseUtils.readXml(Global.getConfig("xml"));
 		AuthBean authBean = XmlParseUtils.xmlToBean(element, AuthBean.class);
+		LogicBean logicBean = XmlParseUtils.xmlToBean(element, LogicBean.class);
 		new Thread(() -> AuthServer.startAuthServer(authBean.getPort())).start();
 
+		new Thread(() -> DefaultAuthLogicServer.startAuthLogicConnection(logicBean.getIp(), logicBean.getPort()))
+				.start();
 	}
 }

@@ -21,8 +21,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 	private static final Logger logger = LoggerFactory.getLogger(LogicServerHandler.class);
-	private static ChannelHandlerContext _gateLogicConnection;
-	private static ChannelHandlerContext _authLogicConnection;
+	private static ChannelHandlerContext gateLogicChannelHandlerContext;
+	private static ChannelHandlerContext authLogicChannelHandlerContext;
 
 	// 激活用户Map
 	private static HashMap<String, Long> userid2netidMap = new HashMap<>();
@@ -37,12 +37,12 @@ public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 		int order = ParseMap.getOrder(msg.getClass());
 		IMHandler handler;
 		if (msg instanceof GreetBean) {
-			handler = HandlerManager.getHandler(order, registerBean.getUserId(), msg, ctx);
+			handler = HandlerManager.getHandler(order, msg.getUserId(), msg, ctx);
 		} else {
-			handler = HandlerManager.getHandler(order, registerBean.getUserId(), msg, getGateLogicConnection());
+			handler = HandlerManager.getHandler(order, msg.getUserId(), msg, getGateLogicChannelHandlerContext());
 		}
 
-		Worker.dispatch(gt.getUserId(), handler);
+		Worker.dispatch(msg.getUserId(), handler);
 	}
 
 	@Override
@@ -64,25 +64,25 @@ public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 		}
 	}
 
-	public static void setGateLogicConnection(ChannelHandlerContext ctx) {
-		_gateLogicConnection = ctx;
+	public static void setGateLogicChannelHandlerContext(ChannelHandlerContext ctx) {
+		gateLogicChannelHandlerContext = ctx;
 	}
 
-	public static ChannelHandlerContext getGateLogicConnection() {
-		if (_gateLogicConnection != null) {
-			return _gateLogicConnection;
+	public static ChannelHandlerContext getGateLogicChannelHandlerContext() {
+		if (gateLogicChannelHandlerContext != null) {
+			return gateLogicChannelHandlerContext;
 		} else {
 			return null;
 		}
 	}
 
-	public static void setAuthLogicConnection(ChannelHandlerContext ctx) {
-		_authLogicConnection = ctx;
+	public static void setAuthLogicChannelHandlerContext(ChannelHandlerContext ctx) {
+		authLogicChannelHandlerContext = ctx;
 	}
 
-	public static ChannelHandlerContext getAuthLogicConnection() {
-		if (_authLogicConnection != null) {
-			return _authLogicConnection;
+	public static ChannelHandlerContext getAuthLogicChannelHandlerContext() {
+		if (authLogicChannelHandlerContext != null) {
+			return authLogicChannelHandlerContext;
 		} else {
 			return null;
 		}

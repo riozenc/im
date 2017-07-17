@@ -13,6 +13,7 @@ import org.im.gate.bean.GateBean;
 import org.im.gate.bean.LogicBean;
 import org.im.gate.server.DefaultGate;
 import org.im.gate.server.DefaultGateAuthServer;
+import org.im.gate.server.DefaultGateLogicServer;
 
 import com.riozenc.quicktool.common.util.xml.XmlParseUtils;
 import com.riozenc.quicktool.config.Global;
@@ -38,9 +39,9 @@ public class GateStarter {
 
 			new Thread(() -> DefaultGateAuthServer.startGateAuthConnection(authBean.getIp(), authBean.getPort()))
 					.start();
-//
-//			new Thread(() -> DefaultGateLogicServer.startGateLogicConnection(logicBean.getIp(), logicBean.getPort()))
-//					.start();
+
+			new Thread(() -> DefaultGateLogicServer.startGateLogicConnection(logicBean.getIp(), logicBean.getPort()))
+					.start();
 
 		} catch (Exception e) {
 

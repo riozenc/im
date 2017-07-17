@@ -5,8 +5,16 @@
 **/
 package org.im.protocol.bean;
 
-public class GreetBean {
-	private int type;//0:auth 1:logic
+import java.io.IOException;
+
+import org.im.protocol.msg.AbstractMessage;
+import org.im.protocol.msg.Message;
+
+public class GreetBean extends AbstractMessage {
+	public static final int GREET_AUTH = 0;
+	public static final int GREET_LOGIC = 1;
+	private String userId = "admin";
+	private int type;// 0:auth 1:logic
 
 	public int getType() {
 		return type;
@@ -14,6 +22,22 @@ public class GreetBean {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	@Override
+	public Message process(byte[] bytes) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] toXmlByte() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
