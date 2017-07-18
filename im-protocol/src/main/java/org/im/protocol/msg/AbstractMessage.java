@@ -24,15 +24,19 @@ import com.riozenc.quicktool.common.util.xml.XmlUtils;
 public abstract class AbstractMessage implements Message {
 
 	private static final byte[] heads = { (byte) 254, (byte) 254, (byte) 254 };// 头长度3
+
 	private byte version;// 协议版本 长度1
-	private byte[] uuid = new byte[4];// 指令ID//个人帐号
-	private byte[] order = new byte[4];// 命令 长度4 会补0
+	private byte[] uidByte = new byte[4];// 指令ID//个人帐号
+	private byte[] orderByte = new byte[4];// 命令 长度4 会补0
 	private byte[] length = new byte[4];// 数据长度 长度4
 	private byte[] data;// 数据 长度等于length
 	private byte[] date = new byte[6];// 数据时间 长度6 年月日时分秒
 	private byte encryption;// 加密方式 长度1
 	private byte[] crc = new byte[3];// 校验 长度2
 	private byte end = (byte) 254;// 结束符
+
+	private String UID;
+	private int order;
 
 	protected byte[] getHeads() {
 		return heads;
@@ -42,8 +46,8 @@ public abstract class AbstractMessage implements Message {
 		return version;
 	}
 
-	protected byte[] getUuid() {
-		return uuid;
+	protected byte[] getUIDByte() {
+		return uidByte;
 	}
 
 	protected byte[] getCrc() {
@@ -54,8 +58,8 @@ public abstract class AbstractMessage implements Message {
 		return encryption;
 	}
 
-	protected byte[] getOrder() {
-		return order;
+	protected byte[] getOrderByte() {
+		return orderByte;
 	}
 
 	protected byte[] getDataLength() {
@@ -103,6 +107,27 @@ public abstract class AbstractMessage implements Message {
 	public Message process(byte[] bytes) throws IOException {
 		// TODO Auto-generated method stub
 		return byte2Message(bytes);
+	}
+
+	@Override
+	public String getUID() {
+		// TODO Auto-generated method stub
+		return UID;
+	}
+
+	@Override
+	public void setUID(String UID) {
+		this.UID = UID;
+	}
+
+	@Override
+	public int getOrder() {
+		return order;
+	}
+
+	@Override
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
 }

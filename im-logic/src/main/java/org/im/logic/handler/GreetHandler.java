@@ -18,13 +18,13 @@ public class GreetHandler extends IMHandler {
 
 	@Override
 	protected void excute(Worker worker) {
-		GreetBean msg = (GreetBean) _msg;
+		GreetBean greetBean = (GreetBean) msg;
 
-		if (msg.getType() == GreetBean.GREET_AUTH) {
-			LogicServerHandler.setAuthLogicChannelHandlerContext(_ctx);
+		if (greetBean.getType() == GreetBean.GREET_AUTH) {
+			LogicServerHandler.setAuthLogicChannelHandlerContext(ctx);
 			logger.info("[Auth-Logic] connection is established");
-		} else if (msg.getType() == GreetBean.GREET_LOGIC) {
-			LogicServerHandler.setGateLogicChannelHandlerContext(_ctx);
+		} else if (greetBean.getType() == GreetBean.GREET_LOGIC) {
+			LogicServerHandler.setGateLogicChannelHandlerContext(ctx);
 			logger.info("[Gate-Logic] connection is established");
 		}
 	}

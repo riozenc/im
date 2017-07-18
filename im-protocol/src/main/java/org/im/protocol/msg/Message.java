@@ -20,5 +20,11 @@ public interface Message {
 
 	public Message byte2Message(byte[] bs);
 
-	public String getUserId();
+	public int getOrder();// 命令
+
+	public void setOrder(int order);
+
+	public String getUID();
+
+	public void setUID(String UID);
 }

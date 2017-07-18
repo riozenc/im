@@ -10,7 +10,7 @@ package org.im.auth.server;
 import java.net.InetSocketAddress;
 
 import org.im.auth.HandlerManager;
-import org.im.auth.handler.AuthServerHandler;
+import org.im.auth.handler.gate.AuthServerHandler;
 import org.im.protocol.ParseRegistryMap;
 import org.im.protocol.code.PacketDecoder;
 import org.im.protocol.code.PacketEncoder;

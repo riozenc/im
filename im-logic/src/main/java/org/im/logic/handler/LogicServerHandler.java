@@ -5,8 +5,6 @@
 **/
 package org.im.logic.handler;
 
-import java.util.HashMap;
-
 import org.im.logic.HandlerManager;
 import org.im.logic.IMHandler;
 import org.im.logic.Worker;
@@ -24,9 +22,6 @@ public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 	private static ChannelHandlerContext gateLogicChannelHandlerContext;
 	private static ChannelHandlerContext authLogicChannelHandlerContext;
 
-	// 激活用户Map
-	private static HashMap<String, Long> userid2netidMap = new HashMap<>();
-
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 	}
@@ -37,31 +32,18 @@ public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 		int order = ParseMap.getOrder(msg.getClass());
 		IMHandler handler;
 		if (msg instanceof GreetBean) {
-			handler = HandlerManager.getHandler(order, msg.getUserId(), msg, ctx);
+			handler = HandlerManager.getHandler(order, msg.getUID(), msg, ctx);
 		} else {
-			handler = HandlerManager.getHandler(order, msg.getUserId(), msg, getGateLogicChannelHandlerContext());
+			handler = HandlerManager.getHandler(order, msg.getUID(), msg, getGateLogicChannelHandlerContext());
 		}
 
-		Worker.dispatch(msg.getUserId(), handler);
+		Worker.dispatch(msg.getUID(), handler);
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		// super.exceptionCaught(ctx, cause);
 		logger.error("An Exception Caught");
-	}
-
-	public static void putInUseridMap(String userid, Long netId) {
-		userid2netidMap.put(userid, netId);
-	}
-
-	public static Long getNetidByUserid(String userid) {
-		Long netid = userid2netidMap.get(userid);
-		if (netid != null) {
-			return netid;
-		} else {
-			return null;
-		}
 	}
 
 	public static void setGateLogicChannelHandlerContext(ChannelHandlerContext ctx) {

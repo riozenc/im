@@ -5,10 +5,7 @@
 **/
 package org.im.protocol.bean;
 
-import java.io.IOException;
-
 import org.im.protocol.msg.AbstractMessage;
-import org.im.protocol.msg.Message;
 
 public class GreetBean extends AbstractMessage {
 	public static final int GREET_AUTH = 0;
@@ -29,15 +26,15 @@ public class GreetBean extends AbstractMessage {
 	}
 
 	@Override
-	public Message process(byte[] bytes) throws IOException {
+	public void setUID(String UID) {
 		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("GreetBean userId is final...");
 	}
 
 	@Override
-	public byte[] toXmlByte() {
+	public String getUID() {
 		// TODO Auto-generated method stub
-		return null;
+		return userId;
 	}
 
 }

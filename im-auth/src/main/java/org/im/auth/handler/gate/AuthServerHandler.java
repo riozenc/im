@@ -5,7 +5,7 @@
  * @Datetime:2017年7月14日 下午12:30:06
  * 
  */
-package org.im.auth.handler;
+package org.im.auth.handler.gate;
 
 import java.util.HashMap;
 
@@ -13,7 +13,7 @@ import org.im.auth.HandlerManager;
 import org.im.auth.IMHandler;
 import org.im.auth.Worker;
 import org.im.protocol.analysis.ParseMap;
-import org.im.protocol.bean.RegisterBean;
+import org.im.protocol.bean.GreetBean;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +23,15 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 public class AuthServerHandler extends SimpleChannelInboundHandler<Message> {
 	private static final Logger logger = LoggerFactory.getLogger(AuthServerHandler.class);
-	private static ChannelHandlerContext _gateAuthConnection;
+	private static ChannelHandlerContext gateAuthChannelHandlerContext;
 
-	public static void setGateAuthConnection(ChannelHandlerContext ctx) {
-		_gateAuthConnection = ctx;
+	public static void setGateAuthChannelHandlerContext(ChannelHandlerContext ctx) {
+		gateAuthChannelHandlerContext = ctx;
 	}
 
-	public static ChannelHandlerContext getGateAuthConnection() {
-		if (_gateAuthConnection != null) {
-			return _gateAuthConnection;
+	public static ChannelHandlerContext getGateAuthChannelHandlerContext() {
+		if (gateAuthChannelHandlerContext != null) {
+			return gateAuthChannelHandlerContext;
 		} else {
 			return null;
 		}
@@ -47,15 +47,14 @@ public class AuthServerHandler extends SimpleChannelInboundHandler<Message> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
 		// TODO Auto-generated method stub
-		// 只能是注册bean
-
 		int order = ParseMap.getOrder(msg.getClass());
-		if (msg instanceof RegisterBean) {
-			RegisterBean registerBean = (RegisterBean) msg;
-			IMHandler handler = HandlerManager.getHandler(order, registerBean.getUserId(), msg, ctx);
-			Worker.dispatch(registerBean.getUserId(), handler);
+		IMHandler handler;
+		if (msg instanceof GreetBean) {
+			handler = HandlerManager.getHandler(order, msg.getUID(), msg, ctx);
+		} else {
+			handler = HandlerManager.getHandler(order, msg.getUID(), msg, getGateAuthChannelHandlerContext());
 		}
-
+		Worker.dispatch(msg.getUID(), handler);
 	}
 
 	@Override

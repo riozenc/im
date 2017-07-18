@@ -7,7 +7,7 @@
  */
 package org.im.auth.server;
 
-import org.im.auth.handler.AuthLogicHandler;
+import org.im.auth.handler.logic.AuthLogicHandler;
 import org.im.protocol.code.PacketDecoder;
 import org.im.protocol.code.PacketEncoder;
 import org.slf4j.Logger;
@@ -32,12 +32,9 @@ public class DefaultAuthLogicServer {
 					@Override
 					protected void initChannel(SocketChannel channel) throws Exception {
 						ChannelPipeline pipeline = channel.pipeline();
-
 						pipeline.addLast("MessageDecoder", new PacketDecoder());
 						pipeline.addLast("MessageEncoder", new PacketEncoder());
-						pipeline.addLast("AuthLogicConnectionHandler", new AuthLogicHandler()); // Auth
-																								// ->
-																								// gate
+						pipeline.addLast("AuthLogicHandler", new AuthLogicHandler());
 					}
 				});
 

@@ -8,14 +8,14 @@ import io.netty.channel.ChannelHandlerContext;
  * Created by Dell on 2016/3/2.
  */
 public abstract class IMHandler {
-	protected final String _userid;
-	protected final Message _msg;
-	protected ChannelHandlerContext _ctx;
+	protected final String userid;
+	protected final Message msg;
+	protected ChannelHandlerContext ctx;
 
 	protected IMHandler(String userid, Message msg, ChannelHandlerContext ctx) {
-		_userid = userid;
-		_msg = msg;
-		_ctx = ctx;
+		this.userid = userid;
+		this.msg = msg;
+		this.ctx = ctx;
 	}
 
 	protected abstract void excute(Worker worker) throws Exception;

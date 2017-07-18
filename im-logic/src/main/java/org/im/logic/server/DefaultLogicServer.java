@@ -32,11 +32,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  * @author riozenc
  *
  */
-public class DefaultLogic implements ILogic {
+public class DefaultLogicServer {
 	private static Logger logger = LogManager.getLogger();
 
-	@Override
-	public void startLogic(int port) {
+	public static void startLogic(int port) {
 		// TODO Auto-generated method stub
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workGroup = new NioEventLoopGroup();
@@ -68,7 +67,7 @@ public class DefaultLogic implements ILogic {
 		});
 	}
 
-	protected static void bindConnectionOptions(ServerBootstrap bootstrap) {
+	private static void bindConnectionOptions(ServerBootstrap bootstrap) {
 
 		bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 		bootstrap.childOption(ChannelOption.SO_LINGER, 0);

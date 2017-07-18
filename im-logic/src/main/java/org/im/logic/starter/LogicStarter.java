@@ -7,7 +7,7 @@ package org.im.logic.starter;
 
 import org.dom4j.Element;
 import org.im.logic.bean.LogicBean;
-import org.im.logic.server.DefaultLogic;
+import org.im.logic.server.DefaultLogicServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class LogicStarter {
 			LogicBean logicBean = XmlParseUtils.xmlToBean(element, LogicBean.class);
 
 			new Thread(() -> {
-				new DefaultLogic().startLogic(logicBean.getPort());
+				DefaultLogicServer.startLogic(logicBean.getPort());
 			}).start();
 		} catch (Exception e) {
 			e.printStackTrace();

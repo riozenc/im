@@ -1,22 +1,21 @@
 /**
- * Title:TalkBean.java
+ * Title:GroupChatBean.java
  * Author:riozenc
- * Datetime:2017年7月17日 下午2:31:10
+ * Datetime:2017年7月18日 上午8:57:28
 **/
-package org.im.logic.bean;
+package org.im.protocol.bean;
 
 /**
- * 对话bean（离线、在线）
+ * 群聊
  * 
  * @author riozenc
  *
  */
-public class TalkBean {
+public class GroupChatBean {
 	private String to;
 	private String from;
-	private String date;
+	private String dateTime;
 	private String content;
-	private String filePath;
 
 	public String getTo() {
 		return to;
@@ -34,12 +33,12 @@ public class TalkBean {
 		this.from = from;
 	}
 
-	public String getDate() {
-		return date;
+	public String getDateTime() {
+		return dateTime;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setDateTime(String dateTime) {
+		this.dateTime = dateTime;
 	}
 
 	public String getContent() {
@@ -48,14 +47,6 @@ public class TalkBean {
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
 	}
 
 }

@@ -65,7 +65,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		size += 1;
 
 		// 获取uuid
-		String uuid = new String("" + bs[4] + bs[5] + bs[6] + bs[7]);
+		String UID = new String("" + bs[4] + bs[5] + bs[6] + bs[7]);
 		size += 4;
 		String order = new String("" + bs[8] + bs[9] + bs[10] + bs[11]);
 		size += 4;
@@ -106,12 +106,9 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 			// 消息体转对象
 
-			// 解密消息体
-			// ThreeDES des = ctx.channel().attr(ClientAttr.ENCRYPT).get();
-			// byte[] bareByte = des.decrypt(inByte);
-
-			// byte[] body = byteBuf.array();
 			Message msg = ParseMap.getMessage(Integer.parseInt(order, 16), body);
+			msg.setOrder(Integer.parseInt(order, 16));
+			msg.setUID(UID);
 			out.add(msg);
 			logger.info("GateServer Received Message: content length {}, order: {}", length, order);
 

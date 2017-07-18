@@ -2,8 +2,12 @@ package org.im.auth;
 
 import io.netty.channel.ChannelHandlerContext;
 
-import org.im.auth.handler.CRegisterHandler;
+import org.im.auth.handler.GreetHandler;
+import org.im.auth.handler.gate.RegisterHandler;
+import org.im.auth.handler.logic.PrivateChatHandler;
 import org.im.protocol.analysis.ParseMap;
+import org.im.protocol.bean.GreetBean;
+import org.im.protocol.bean.PrivateChatBean;
 import org.im.protocol.bean.RegisterBean;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
@@ -31,11 +35,11 @@ public class HandlerManager {
 		}
 	}
 
-	public static IMHandler getHandler(int msgNum, String userId, Message msg, ChannelHandlerContext ctx)
+	public static IMHandler getHandler(int order, String userId, Message msg, ChannelHandlerContext ctx)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException {
-		Constructor<? extends IMHandler> constructor = _handlers.get(msgNum);
+		Constructor<? extends IMHandler> constructor = _handlers.get(order);
 		if (constructor == null) {
-			logger.error("handler not exist, Message Number: {}", msgNum);
+			logger.error("handler not exist, Message Order: {}", order);
 			return null;
 		}
 
@@ -43,6 +47,11 @@ public class HandlerManager {
 	}
 
 	public static void initHandlers() {
-		HandlerManager.register(RegisterBean.class, CRegisterHandler.class);
+
+		HandlerManager.register(GreetBean.class, GreetHandler.class);
+
+		HandlerManager.register(RegisterBean.class, RegisterHandler.class);
+
+		HandlerManager.register(PrivateChatBean.class, PrivateChatHandler.class);
 	}
 }

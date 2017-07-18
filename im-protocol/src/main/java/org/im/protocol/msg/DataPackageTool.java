@@ -5,11 +5,8 @@
 **/
 package org.im.protocol.msg;
 
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
 import org.im.protocol.analysis.ParseMap;
 
 import com.riozenc.quicktool.config.Global;
@@ -26,7 +23,7 @@ public class DataPackageTool {
 		// 版本号
 		byte version = Byte.parseByte(Global.getConfig("protocol-version"));
 		// uuid
-		byte[] uuid = message.getUuid();
+		byte[] uuid = message.getUIDByte();
 
 		int order = ParseMap.getOrder(message.getClass());
 		// String --> byte[]

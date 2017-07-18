@@ -9,6 +9,7 @@ package org.im.auth.handler;
 
 import org.im.auth.IMHandler;
 import org.im.auth.Worker;
+import org.im.auth.handler.gate.AuthServerHandler;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class GreetHandler extends IMHandler {
 	@Override
 	protected void excute(Worker worker) throws Exception {
 		// TODO Auto-generated method stub
-		AuthServerHandler.setGateAuthConnection(_ctx);
+		AuthServerHandler.setGateAuthChannelHandlerContext(ctx);
 		logger.info("[Gate-Auth] connection is established");
 	}
 

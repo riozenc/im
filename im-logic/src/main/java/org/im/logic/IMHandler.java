@@ -5,16 +5,16 @@ import org.im.protocol.msg.Message;
 import io.netty.channel.ChannelHandlerContext;
 
 public abstract class IMHandler {
-	protected final String _userid;
-	protected final long _netid;
-	protected final Message _msg;
-	protected ChannelHandlerContext _ctx;
+	protected final String userid;
+	protected final long netid;
+	protected final Message msg;
+	protected ChannelHandlerContext ctx;
 
 	protected IMHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
-		_userid = userid;
-		_netid = netid;
-		_msg = msg;
-		_ctx = ctx;
+		this.userid = userid;
+		this.netid = netid;
+		this.msg = msg;
+		this.ctx = ctx;
 	}
 
 	protected abstract void excute(Worker worker);
