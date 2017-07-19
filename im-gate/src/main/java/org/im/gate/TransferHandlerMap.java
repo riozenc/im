@@ -12,9 +12,7 @@ import org.im.protocol.bean.RegisterBean;
 
 public class TransferHandlerMap {
 	public static void initRegistry() throws IOException {
-		ClientMessage.registerTranferHandler(900, ClientMessage::transfer2Auth, RegisterBean.class);
-
+		ClientMessage.registerTranferHandler(1000, ClientMessage::transfer2Auth, RegisterBean.class);
 		ClientMessage.registerTranferHandler(1001, ClientMessage::transfer2Logic, PrivateChatBean.class);
-
 	}
 }
