@@ -7,13 +7,16 @@ package org.im.auth.handler.logic;
 
 import org.im.auth.IMHandler;
 import org.im.auth.Worker;
-import org.im.auth.handler.gate.AuthServerHandler;
 import org.im.protocol.bean.PrivateChatBean;
 import org.im.protocol.msg.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.netty.channel.ChannelHandlerContext;
 
 public class PrivateChatHandler extends IMHandler {
+
+	private static final Logger logger = LoggerFactory.getLogger(PrivateChatHandler.class);
 
 	protected PrivateChatHandler(String userid, Message msg, ChannelHandlerContext ctx) {
 		super(userid, msg, ctx);
@@ -25,10 +28,13 @@ public class PrivateChatHandler extends IMHandler {
 		// TODO Auto-generated method stub
 
 		PrivateChatBean privateChatBean = (PrivateChatBean) msg;
-		
-		String toUser = privateChatBean.getTo();
 
-		AuthServerHandler.getNetidByUserid(userid);
+		logger.info("PrivateChat from {} to {} : content {}", privateChatBean.getFrom(), privateChatBean.getTo(),
+				privateChatBean.getContent());
+
+		privateChatBean.setUID(privateChatBean.getTo());
+		// 是否认证，是否在线等特殊处理
+		ctx.writeAndFlush(privateChatBean);
 	}
 
 }

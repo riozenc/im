@@ -13,18 +13,18 @@ import org.slf4j.LoggerFactory;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-public class GateLogicConnectionHandler extends SimpleChannelInboundHandler<Message> {
-	private static final Logger logger = LoggerFactory.getLogger(GateLogicConnectionHandler.class);
+public class GateLogicHandler extends SimpleChannelInboundHandler<Message> {
+	private static final Logger logger = LoggerFactory.getLogger(GateLogicHandler.class);
 
-	private static ChannelHandlerContext _gateLogicConnection;
+	private static ChannelHandlerContext gateLogicChannelHandlerContext;
 
-	public static ChannelHandlerContext getGatelogicConnection() {
-		return _gateLogicConnection;
+	public static ChannelHandlerContext getGatelogicChannelHandlerContext() {
+		return gateLogicChannelHandlerContext;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		_gateLogicConnection = ctx;
+		gateLogicChannelHandlerContext = ctx;
 		logger.info("[Gate-Logic] connection is established");
 
 		// 向logic发送Greet
@@ -40,7 +40,7 @@ public class GateLogicConnectionHandler extends SimpleChannelInboundHandler<Mess
 	private void sendGreet2Logic() {
 		GreetBean greetBean = new GreetBean();
 		greetBean.setType(GreetBean.GREET_LOGIC);
-		getGatelogicConnection().writeAndFlush(greetBean.message2Byte());
+		getGatelogicChannelHandlerContext().writeAndFlush(greetBean.message2Byte());
 		logger.info("Gate send Green to Logic.");
 	}
 }

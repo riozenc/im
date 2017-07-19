@@ -5,7 +5,7 @@
 **/
 package org.im.gate.server;
 
-import org.im.gate.handler.GateLogicConnectionHandler;
+import org.im.gate.handler.GateLogicHandler;
 import org.im.protocol.code.PacketDecoder;
 import org.im.protocol.code.PacketEncoder;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class DefaultGateLogicServer {
 						pipeline.addLast("MessageDecoder", new PacketDecoder());
 						pipeline.addLast("MessageEncoder", new PacketEncoder());
 
-						pipeline.addLast("GateLogicConnectionHandler", new GateLogicConnectionHandler()); // logic
+						pipeline.addLast("GateLogicConnectionHandler", new GateLogicHandler()); // logic
 																											// ->
 																											// gate
 					}

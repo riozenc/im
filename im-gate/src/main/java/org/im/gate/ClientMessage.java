@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.im.gate.connection.ClientConnection;
-import org.im.gate.handler.GateAuthConnectionHandler;
-import org.im.gate.handler.GateLogicConnectionHandler;
+import org.im.gate.connection.ClientConnectionMap;
+import org.im.gate.handler.GateAuthHandler;
+import org.im.gate.handler.GateLogicHandler;
 import org.im.protocol.bean.RegisterBean;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
@@ -23,60 +24,66 @@ public class ClientMessage {
 	private static final Logger logger = LoggerFactory.getLogger(ClientMessage.class);
 
 	public static HashMap<Integer, Transfer> tranferHandlerMap = new HashMap<>();
-	public static HashMap<Class<?>, Integer> msg2ptoNum = new HashMap<>();
+	public static HashMap<Class<?>, Integer> msg2Order = new HashMap<>();
 
 	@FunctionalInterface
 	public interface Transfer {
 		void process(Message msg, ClientConnection conn) throws IOException;
 	}
 
-	public static void registerTranferHandler(Integer ptoNum, Transfer tranfer, Class<?> cla) {
-		if (tranferHandlerMap.get(ptoNum) == null)
-			tranferHandlerMap.put(ptoNum, tranfer);
+	public static void registerTranferHandler(Integer order, Transfer tranfer, Class<?> cla) {
+		if (tranferHandlerMap.get(order) == null)
+			tranferHandlerMap.put(order, tranfer);
 		else {
-			logger.error("pto has been registered in transeerHandlerMap, ptoNum: {}", ptoNum);
+			logger.error("pto has been registered in transeerHandlerMap, order: {}", order);
 			return;
 		}
 
-		if (msg2ptoNum.get(cla) == null)
-			msg2ptoNum.put(cla, ptoNum);
+		if (msg2Order.get(cla) == null)
+			msg2Order.put(cla, order);
 		else {
-			logger.error("pto has been registered in msg2ptoNum, ptoNum: {}", ptoNum);
+			logger.error("pto has been registered in msg2Order, order: {}", order);
 			return;
 		}
 	}
 
+	// new
 	public static void processTransferHandler(Message msg, ClientConnection conn) throws IOException {
 		logger.info("MessageName {}", msg.getClass());
-		int ptoNum = msg2ptoNum.get(msg.getClass());
-		Transfer transferHandler = tranferHandlerMap.get(ptoNum);
+		int order = msg2Order.get(msg.getClass());
+		Transfer transferHandler = tranferHandlerMap.get(order);
 
 		if (transferHandler != null) {
 			transferHandler.process(msg, conn);
 		}
 	}
 
+	/**
+	 * 转发logic
+	 * 
+	 * @param msg
+	 * @param conn
+	 */
 	public static void transfer2Logic(Message msg, ClientConnection conn) {
 		ByteBuf byteBuf = null;
-		if (conn.getUserId() == null) {
+		if (conn.getUID() == null) {
 			logger.error("User not login.");
 			return;
 		}
 
-		// if (msg instanceof Chat.CPrivateChat) {
-		// byteBuf = Utils.pack2Server(msg, ParseMap.getPtoNum(msg),
-		// conn.getNetId(), Internal.Dest.Logic,
-		// conn.getUserId());
-		// }
-
-		GateLogicConnectionHandler.getGatelogicConnection().writeAndFlush(byteBuf);
+		GateLogicHandler.getGatelogicChannelHandlerContext().writeAndFlush(byteBuf);
 	}
 
-	public static void transfer2Register(Message msg, ClientConnection conn) {
-
+	/**
+	 * 转发auth
+	 * 
+	 * @param msg
+	 * @param connection
+	 */
+	public static void transfer2Auth(Message msg, ClientConnection connection) {
 		RegisterBean bean = (RegisterBean) msg;
-
-		GateAuthConnectionHandler.getGateAuthConnection().writeAndFlush(bean.message2Byte());
-
+		// 保存客户端连接
+		ClientConnectionMap.addClientConnection(connection, bean.getUID());
+		GateAuthHandler.getGateAuthChannelHandlerContext().writeAndFlush(bean.message2Byte());
 	}
 }

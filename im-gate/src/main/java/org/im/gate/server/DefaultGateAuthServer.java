@@ -5,7 +5,7 @@
 **/
 package org.im.gate.server;
 
-import org.im.gate.handler.GateAuthConnectionHandler;
+import org.im.gate.handler.GateAuthHandler;
 import org.im.protocol.code.PacketDecoder;
 import org.im.protocol.code.PacketEncoder;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class DefaultGateAuthServer {
 
 						pipeline.addLast("MessageDecoder", new PacketDecoder());
 						pipeline.addLast("MessageEncoder", new PacketEncoder());
-						pipeline.addLast("GateAuthConnectionHandler", new GateAuthConnectionHandler()); // Auth
+						pipeline.addLast("GateAuthConnectionHandler", new GateAuthHandler()); // Auth
 																										// ->
 																										// gate
 					}

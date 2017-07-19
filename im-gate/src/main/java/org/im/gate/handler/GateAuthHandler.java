@@ -5,6 +5,7 @@
 **/
 package org.im.gate.handler;
 
+import org.im.gate.connection.ClientConnectionMap;
 import org.im.protocol.bean.GreetBean;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
@@ -19,17 +20,17 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author rioze
  *
  */
-public class GateAuthConnectionHandler extends SimpleChannelInboundHandler<Message> {
-	private static final Logger logger = LoggerFactory.getLogger(GateAuthConnectionHandler.class);
-	private static ChannelHandlerContext _gateAuthConnection;
+public class GateAuthHandler extends SimpleChannelInboundHandler<Message> {
+	private static final Logger logger = LoggerFactory.getLogger(GateAuthHandler.class);
+	private static ChannelHandlerContext gateAuthChannelHandlerContext;
 
-	public static ChannelHandlerContext getGateAuthConnection() {
-		return _gateAuthConnection;
+	public static ChannelHandlerContext getGateAuthChannelHandlerContext() {
+		return gateAuthChannelHandlerContext;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		_gateAuthConnection = ctx;
+		gateAuthChannelHandlerContext = ctx;
 		logger.info("[Gate-Auth] connection is established");
 
 		sendGreet2Auth();// 发送内部协议
@@ -40,13 +41,17 @@ public class GateAuthConnectionHandler extends SimpleChannelInboundHandler<Messa
 	protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
 		// TODO Auto-generated method stub
 
+		String uid = msg.getUID();
+		
+		ClientConnectionMap.getClientConnection(uid).getCtx().writeAndFlush(msg);
+
 	}
 
 	private void sendGreet2Auth() {
 		// 向auth送Greet协议
 		GreetBean greetBean = new GreetBean();
 		greetBean.setType(GreetBean.GREET_AUTH);
-		getGateAuthConnection().writeAndFlush(greetBean.message2Byte());
+		getGateAuthChannelHandlerContext().writeAndFlush(greetBean.message2Byte());
 		logger.info("Gate send Green to Auth.");
 	}
 }

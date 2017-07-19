@@ -109,6 +109,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 			Message msg = ParseMap.getMessage(Integer.parseInt(order, 16), body);
 			msg.setOrder(Integer.parseInt(order, 16));
 			msg.setUID(UID);
+
 			out.add(msg);
 			logger.info("GateServer Received Message: content length {}, order: {}", length, order);
 

@@ -29,6 +29,9 @@ public class RegisterHandler extends IMHandler {
 		String userId = registerBean.getUserId();
 		// 这个userId是有效的
 		UserCache.addUser(userId);
+
+		// 返回注册成功or失败
+		ctx.writeAndFlush(registerBean);//
 	}
 
 }

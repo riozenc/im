@@ -5,9 +5,6 @@
 **/
 package org.im.gate.connection;
 
-
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,48 +12,26 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 
 public class ClientConnection {
-	private static final AtomicLong netidGenerator = new AtomicLong(0);
-
-	ClientConnection(ChannelHandlerContext c) {
-		_netId = netidGenerator.incrementAndGet();
-		_ctx = c;
-		
-		//研究一下
-		c.channel().attr(ClientConnection.NETID).set(_netId);;
-		_ctx.attr(ClientConnection.NETID).set(_netId);
-		
-	}
-
 	private static final Logger logger = LoggerFactory.getLogger(ClientConnection.class);
 
-//	public static AttributeKey<ThreeDES> ENCRYPT = AttributeKey.valueOf("encrypt");
-	public static AttributeKey<Long> NETID = AttributeKey.valueOf("netid");
-
-	private String _userId;
-	private long _netId;
-	private ChannelHandlerContext _ctx;
-
-	public long getNetId() {
-		return _netId;
+	ClientConnection(ChannelHandlerContext c, String UID) {
+		this.ctx = c;
+		ctx.channel().attr(ClientConnection.UID).set(UID);
 	}
 
-	public String getUserId() {
-		return _userId;
-	}
+	public static AttributeKey<String> UID = AttributeKey.valueOf("UID");
 
-	public void setUserId(String userId) {
-		_userId = userId;
-	}
+	private ChannelHandlerContext ctx;
 
-	public void readUserIdFromDB() {
-
+	public String getUID() {
+		return ctx.channel().attr(ClientConnection.UID).get();
 	}
 
 	public void setCtx(ChannelHandlerContext ctx) {
-		_ctx = ctx;
+		this.ctx = ctx;
 	}
 
 	public ChannelHandlerContext getCtx() {
-		return _ctx;
+		return ctx;
 	}
 }
