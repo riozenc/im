@@ -6,13 +6,18 @@
 package org.im.protocol;
 
 import org.im.protocol.analysis.ParseMap;
+import org.im.protocol.bean.PrivateChatBean;
 import org.im.protocol.bean.RegisterBean;
 
 public class ParseRegistryMap {
 	public static final int CLIENT_REGISTER = 900;
 
-	public static void initRegistry()  {
-		ParseMap.register(CLIENT_REGISTER, RegisterBean.class);//内部协议
+	public static final int CLIENT_PRIVATE_CHAT = 1001;
+
+	public static void initRegistry() {
+		ParseMap.register(CLIENT_REGISTER, RegisterBean.class);// 内部协议
+
+		ParseMap.register(CLIENT_PRIVATE_CHAT, PrivateChatBean.class);// 内部协议
 
 	}
 
