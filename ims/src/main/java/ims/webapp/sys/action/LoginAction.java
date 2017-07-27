@@ -45,6 +45,10 @@ public class LoginAction {
 				return loginFail("IncorrectCredentialsException", httpServletRequest, httpServletResponse);
 			}
 
+			// 生成私钥 和 登录密钥
+			
+			
+			
 			return XmlUtils.object2xml(new XmlResultBean(Common.SUCCESS, XmlUtils.object2xml(principal.getUser())));
 		} else {
 			// 失败

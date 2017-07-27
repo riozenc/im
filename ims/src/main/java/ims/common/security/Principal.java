@@ -19,6 +19,9 @@ public class Principal {
 //	private Date updateDate;// 最后更新时间 UPDATE_DATE datetime
 
 	private Object user;
+	private String privateKey;//私钥
+	private String publicKey;//公钥
+	private String token;//令牌
 
 	public Principal() {
 
