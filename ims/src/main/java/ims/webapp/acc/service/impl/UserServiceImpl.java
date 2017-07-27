@@ -66,4 +66,10 @@ public class UserServiceImpl implements IUserService {
 		return userDAO.insert(userDomain) & companyDAO.insert(companyDomain);
 	}
 
+	@Override
+	public String getPassword(UserDomain userDomain) {
+		// TODO Auto-generated method stub
+		return userDAO.getPassword(userDomain);
+	}
+
 }

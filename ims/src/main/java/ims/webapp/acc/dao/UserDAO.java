@@ -63,8 +63,12 @@ public class UserDAO extends AbstractTransactionDAOSupport implements BaseDAO<Us
 	public List<UserDomain> findUserByGroup(GroupDomain groupDomain) {
 		return getPersistanceManager().find(getNamespace() + ".findUserByGroup", groupDomain);
 	}
-	
-	public int insertList(List<UserDomain> list){
-		return getPersistanceManager(ExecutorType.BATCH).insertList(getNamespace()+".insert", list);
+
+	public String getPassword(UserDomain userDomain) {
+		return getPersistanceManager().load(getNamespace() + ".getPassword", userDomain);
+	}
+
+	public int insertList(List<UserDomain> list) {
+		return getPersistanceManager(ExecutorType.BATCH).insertList(getNamespace() + ".insert", list);
 	}
 }

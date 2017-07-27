@@ -21,13 +21,25 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.riozenc.wisdom.protocol</groupId>
 			<artifactId>im-protocol</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.38</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.7</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>ims</finalName>

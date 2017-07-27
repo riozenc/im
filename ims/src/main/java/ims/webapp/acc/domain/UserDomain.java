@@ -37,11 +37,6 @@ public class UserDomain implements MybatisEntity {
 	public UserDomain() {
 	}
 
-	public UserDomain(UsernamePasswordToken usernamePasswordToken) {
-		this.userId = usernamePasswordToken.getUsername();
-		// 通过正则判断是邮箱还是手机号给相应的属性赋值
-	}
-
 	public Long getId() {
 		return id;
 	}

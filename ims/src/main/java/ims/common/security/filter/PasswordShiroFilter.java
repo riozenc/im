@@ -44,7 +44,9 @@ public class PasswordShiroFilter extends FormAuthenticationFilter {
 	protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,
 			ServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		return super.onLoginSuccess(token, subject, request, response);
+		//踢人需要屏蔽 登陆后自动调转
+//		return super.onLoginSuccess(token, subject, request, response);
+		return true;
 	}
 
 	@Override
