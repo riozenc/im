@@ -8,7 +8,7 @@ package ims.webapp.acc.domain;
 import com.riozenc.quicktool.annotation.TablePrimaryKey;
 import com.riozenc.quicktool.mybatis.MybatisEntity;
 
-import ims.common.security.token.UsernamePasswordToken;
+import ims.common.security.token.IMSToken;
 
 /**
  * 用户

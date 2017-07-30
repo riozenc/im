@@ -10,9 +10,9 @@ package ims.common.security.realm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.riozenc.quicktool.shiro.Principal;
 import com.riozenc.quicktool.shiro.realm.AbstractPasswordShiroRealm;
 
+import ims.common.security.Principal;
 import ims.webapp.acc.domain.UserDomain;
 import ims.webapp.acc.service.IUserService;
 
@@ -28,7 +28,7 @@ public class PasswordShiroRealm extends AbstractPasswordShiroRealm {
 
 		// 判断loginName
 		UserDomain userDomain = new UserDomain();
-
+		userDomain.setUserId(loginName);
 		return userService.getPassword(userDomain);
 	}
 
@@ -45,12 +45,12 @@ public class PasswordShiroRealm extends AbstractPasswordShiroRealm {
 	}
 
 	@Override
-	public Principal createPrincipal(String loginName) {
+	public Object createPrincipal(String loginName) {
 		// TODO Auto-generated method stub
 
 		Principal principal = new Principal();
 		UserDomain userDomain = new UserDomain();
-		userDomain.setUserName(loginName);
+		userDomain.setUserId(loginName);
 		userDomain = userService.findByKey(userDomain);
 		userDomain.setPassword("Want password?");
 		principal.setUserId(userDomain.getUserId());
@@ -59,6 +59,7 @@ public class PasswordShiroRealm extends AbstractPasswordShiroRealm {
 		principal.setMailAddress(userDomain.getMailAddress());
 		principal.setSex(userDomain.getSex());
 		principal.setImageUrl(userDomain.getImageUrl());
+		principal.setUser(userDomain);
 
 		return principal;
 	}

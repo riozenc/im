@@ -27,12 +27,16 @@
 
 	<!-- 默认的注解映射的支持 --><!-- 解决@ResponseBody中文乱码 --><!-- 启动spring内置json转换(注释) -->
 	<mvc:annotation-driven>
-        <mvc:message-converters>
-            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                <constructor-arg value="UTF-8" />
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
+		<mvc:message-converters>
+
+			<bean class="ims.web.support.messageConverter.IMSMessageConverter">
+
+
+			</bean>
+		</mvc:message-converters>
+
+
+	</mvc:annotation-driven>
 	<!-- 注解请求映射 相当与 <mvc:annotation-driven /> 优势：可扩展自定义 <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"> 
 		<property name="interceptors"> <list> <ref bean="logNDCInteceptor"/> 日志拦截器，这是你自定义的拦截器 
 		<ref bean="myRequestHelperInteceptor"/> RequestHelper拦截器，这是你自定义的拦截器 <ref 
@@ -50,6 +54,7 @@
 		/> 处理.. <bean id="jaxb2RootElement_hmc" class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" 
 		/> 处理.. <bean id="jackson_hmc" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" 
 		/> 处理json -->
+
 
 
 	<!-- 上传文件配置 -->
@@ -100,8 +105,8 @@
 	<!-- init-method="initDBs" /> -->
 
 
-<!-- 	<import resource="applicationContext-dataSource.xml" /> -->
-<!-- 	<import resource="applicationContext-mybatis.xml" /> -->
+	<!-- <import resource="applicationContext-dataSource.xml" /> -->
+	<!-- <import resource="applicationContext-mybatis.xml" /> -->
 	<import resource="applicationContext-shiro.xml" />
 
 

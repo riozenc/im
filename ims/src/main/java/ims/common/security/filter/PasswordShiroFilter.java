@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.riozenc.quicktool.common.util.http.HttpUtils;
 
-import ims.common.security.token.UsernamePasswordToken;
+import ims.common.security.token.IMSToken;
 
 @Service
 public class PasswordShiroFilter extends FormAuthenticationFilter {
@@ -37,7 +37,7 @@ public class PasswordShiroFilter extends FormAuthenticationFilter {
 		String host = HttpUtils.getRemoteAddr((HttpServletRequest) request);
 		String captcha = WebUtils.getCleanParam(request, DEFAULT_CAPTCHA_PARAM);
 		boolean mobile = WebUtils.isTrue(request, DEFAULT_MOBILE_PARAM);
-		return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha, mobile);
+		return new IMSToken(username, password.toCharArray(), rememberMe, host, captcha, mobile);
 	}
 
 	@Override

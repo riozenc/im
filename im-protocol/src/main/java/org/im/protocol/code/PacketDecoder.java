@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
@@ -24,19 +24,14 @@ public class PacketDecoder extends ByteToMessageDecoder {
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		// TODO Auto-generated method stub
 
-		// -2 -2 -2 99 0 0 0 0 0 0 3 84 0 0 0 81 60 82 101 103 105 115 116 101
-		// 114 66 101 97 110 62 60 117 115 101 114 73 100 62 99 104 105 122 105
-		// 121 117 101 60 47 117 115 101 114 73 100 62 60 112 97 115 115 119 111
-		// 114 100 62 49 50 51 49 50 51 60 47 112 97 115 115 119 111 114 100 62
-		// 60 47 82 101 103 105 115 116 101 114 66 101 97 110 62 17 7 6 23 10 48
-		// 0 0 0 0 -2
-
 		in.markReaderIndex();
 
 		int length = in.readableBytes();
 		int size = 0;
 
-		ByteBuf byteBuf = Unpooled.buffer(length);
+//		ByteBuf byteBuf = Unpooled.buffer(length);
+//		ByteBuf byteBuf = Unpooled.directBuffer(length);
+		ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(length);//使用内存池分配器创建直接内存缓冲区
 
 		if (in.readableBytes() < 3) {
 			logger.info("readableBytes length less than 3 bytes, ignored");

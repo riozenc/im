@@ -18,21 +18,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.riozenc.quicktool.common.util.StringUtils;
 import com.riozenc.quicktool.common.util.xml.XmlUtils;
 
-import ims.client.Client;
 import ims.common.Common;
 import ims.common.security.Principal;
 import ims.common.security.filter.PasswordShiroFilter;
 import ims.common.xml.XmlResultBean;
+import ims.webapp.BaseAction;
 import ims.webapp.acc.domain.UserDomain;
 
 @ControllerAdvice
 @RequestMapping("loginAction")
-public class LoginAction {
+public class LoginAction extends BaseAction {
+
+	@Override
+	public String getIndex() {
+		// TODO Auto-generated method stub
+		return "login.html";
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "login")
-	public String login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-
+	public Object login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		
+		
+		
+//		httpServletRequest.setHeader("Content-type", "json;charset=UTF-8");
+		
 		String errorClassName = (String) httpServletRequest
 				.getAttribute(PasswordShiroFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 		if (errorClassName == null) {
@@ -46,10 +56,8 @@ public class LoginAction {
 			}
 
 			// 生成私钥 和 登录密钥
-			
-			
-			
-			return XmlUtils.object2xml(new XmlResultBean(Common.SUCCESS, XmlUtils.object2xml(principal.getUser())));
+return principal.getUser();
+//			return XmlUtils.object2xml(new XmlResultBean(Common.SUCCESS, XmlUtils.object2xml(principal.getUser())));
 		} else {
 			// 失败
 			return loginFail(errorClassName, httpServletRequest, httpServletResponse);
@@ -83,7 +91,7 @@ public class LoginAction {
 			isValidateCodeLogin(username, true, false);
 			// model.addAttribute("isValidateCodeLogin", true);
 		}
-
+		
 		return XmlUtils.object2xml(new XmlResultBean(Common.FAILD, message));
 	}
 
@@ -127,4 +135,5 @@ public class LoginAction {
 		}
 		return loginFailNum >= 3;
 	}
+
 }

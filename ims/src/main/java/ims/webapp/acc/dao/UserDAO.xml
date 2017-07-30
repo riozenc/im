@@ -3,7 +3,8 @@
 <mapper namespace="ims.webapp.acc.dao.UserDAO">
 	<select id="findByKey" parameterType="UserDomain" resultType="UserDomain"
 		useCache="true">
-		select ID,USER_ID,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
+		select
+		ID,USER_ID,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
 		from USER_INFO
 		<where>
 			<if test="id !=null">
@@ -16,7 +17,8 @@
 	</select>
 	<select id="findByWhere" parameterType="UserDomain" resultType="UserDomain"
 		useCache="true">
-		select ID,USER_ID,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
+		select
+		ID,USER_ID,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
 		from USER_INFO
 		<where>
 			<if test="id !=null">
@@ -102,6 +104,22 @@
 			</if>
 		</where>
 	</delete>
+
+	<select id="getPassword" parameterType="UserDomain" resultType="String">
+		select PASSWORD from USER_INFO
+		<where>
+			<if test="userId !=null">
+				and USER_ID = #{userId}
+			</if>
+			<if test="phone !=null">
+				and PHONE = #{phone}
+			</if>
+			<if test="mailAddress !=null">
+				and MAIL_ADDRESS = #{mailAddress}
+			</if>
+		</where>
+	</select>
+
 
 
 	<select id="getUser" parameterType="UserDomain" resultType="UserDomain"
