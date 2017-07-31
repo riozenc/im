@@ -28,14 +28,8 @@
 	<!-- 默认的注解映射的支持 --><!-- 解决@ResponseBody中文乱码 --><!-- 启动spring内置json转换(注释) -->
 	<mvc:annotation-driven>
 		<mvc:message-converters>
-
-			<bean class="ims.web.support.messageConverter.IMSMessageConverter">
-
-
-			</bean>
+			<bean class="ims.web.support.messageConverter.IMSMessageConverter" />
 		</mvc:message-converters>
-
-
 	</mvc:annotation-driven>
 	<!-- 注解请求映射 相当与 <mvc:annotation-driven /> 优势：可扩展自定义 <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"> 
 		<property name="interceptors"> <list> <ref bean="logNDCInteceptor"/> 日志拦截器，这是你自定义的拦截器 
@@ -78,14 +72,15 @@
 	<!-- 拦截器 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
+			<mvc:mapping path="/ims/**" />
+			<mvc:exclude-mapping path="/ims/loginAction/**" />
+			<bean class="ims.web.interceptor.LoginInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<bean class="ims.web.interceptor.BaseInterceptor" />
 		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/ims/**" />
-			<mvc:exclude-mapping path="/ims/menuAction/**" />
-			<bean class="ims.web.interceptor.LoginInterceptor" />
-		</mvc:interceptor>
+
 	</mvc:interceptors>
 
 
