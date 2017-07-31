@@ -7,11 +7,18 @@
  */
 package ims.web.interceptor;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.riozenc.quicktool.common.util.date.DateUtil;
+import com.riozenc.quicktool.common.util.http.HttpUtils;
+import com.riozenc.quicktool.common.util.log.LogUtil;
+import com.riozenc.quicktool.common.util.log.LogUtil.LOG_TYPE;
 
 public class LoginInterceptor implements HandlerInterceptor {
 	private final static String LOGIN_URL = "/pages/jsp/login.jsp";
@@ -36,6 +43,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			Object object) throws Exception {
 		// TODO Auto-generated method stub
+
+		System.out.println(httpServletRequest.getParameterMap());
+
 		// 得到请求的url
 		String url = httpServletRequest.getRequestURI();
 		System.out.println(url);

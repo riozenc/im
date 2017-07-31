@@ -18,6 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.util.StreamUtils;
+
+import com.riozenc.quicktool.common.util.json.JSONUtil;
+import com.riozenc.quicktool.common.util.xml.XmlUtils;
 
 public class IMSMessageConverter extends AbstractHttpMessageConverter<Object> {
 
@@ -38,12 +42,9 @@ public class IMSMessageConverter extends AbstractHttpMessageConverter<Object> {
 	@Override
 	public void setSupportedMediaTypes(List<MediaType> supportedMediaTypes) {
 		// TODO Auto-generated method stub
-
 		List<MediaType> list = new ArrayList<MediaType>();
 		list.add(MediaType.APPLICATION_JSON_UTF8);
 		list.add(MediaType.APPLICATION_XML);
-		
-
 		super.setSupportedMediaTypes(list);
 	}
 
@@ -67,9 +68,25 @@ public class IMSMessageConverter extends AbstractHttpMessageConverter<Object> {
 	protected void writeInternal(Object t, HttpOutputMessage outputMessage)
 			throws IOException, HttpMessageNotWritableException {
 		// TODO Auto-generated method stub
-		
-		System.out.println(t);
+		Charset charset = getContentTypeCharset(outputMessage.getHeaders().getContentType());
+		if (outputMessage.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_JSON_UTF8)) {
+			// json
+			StreamUtils.copy(JSONUtil.toJsonString(t), charset, outputMessage.getBody());
+		} else if (outputMessage.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_XML)) {
+			// xml
+			StreamUtils.copy(XmlUtils.object2xml(t), charset, outputMessage.getBody());
+		} else {
+			StreamUtils.copy("未知格式数据..", charset, outputMessage.getBody());
+		}
 
+	}
+
+	private Charset getContentTypeCharset(MediaType contentType) {
+		if (contentType != null && contentType.getCharset() != null) {
+			return contentType.getCharset();
+		} else {
+			return getDefaultCharset();
+		}
 	}
 
 }
