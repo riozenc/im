@@ -19,8 +19,8 @@ import com.riozenc.quicktool.common.util.StringUtils;
 import ims.common.Common;
 import ims.common.security.Principal;
 import ims.common.security.filter.PasswordShiroFilter;
-import ims.common.xml.XmlResultBean;
 import ims.webapp.BaseAction;
+import ims.webapp.ResultBean;
 
 @ControllerAdvice
 @RequestMapping("loginAction")
@@ -84,7 +84,7 @@ public class LoginAction extends BaseAction {
 			// model.addAttribute("isValidateCodeLogin", true);
 		}
 
-		return new XmlResultBean(Common.FAILD, message);
+		return new ResultBean(Common.FAILD, message);
 	}
 
 	@ResponseBody
@@ -93,7 +93,7 @@ public class LoginAction extends BaseAction {
 		Subject subject = SecurityUtils.getSubject();
 		subject.logout();
 		SecurityUtils.getSecurityManager().logout(subject);
-		return new XmlResultBean(Common.SUCCESS, "登出成功.");
+		return new ResultBean(Common.SUCCESS, "登出成功.");
 	}
 
 	public static boolean isValidateCodeLogin(String useruame, boolean isFail, boolean clean) {

@@ -75,6 +75,8 @@ public class IMSMessageConverter extends AbstractHttpMessageConverter<Object> {
 		} else if (outputMessage.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_XML)) {
 			// xml
 			StreamUtils.copy(XmlUtils.object2xml(t), charset, outputMessage.getBody());
+		} else if (t.getClass() == String.class) {
+			StreamUtils.copy((String) t, charset, outputMessage.getBody());
 		} else {
 			StreamUtils.copy("未知格式数据..", charset, outputMessage.getBody());
 		}

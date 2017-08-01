@@ -13,15 +13,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.riozenc.quicktool.common.util.json.JSONUtil;
-
 import ims.common.security.util.UserUtils;
 import ims.webapp.BaseAction;
 import ims.webapp.acc.domain.GroupDomain;
 import ims.webapp.acc.domain.UserDomain;
 import ims.webapp.acc.service.IGroupService;
-
-
 
 @ControllerAdvice
 @RequestMapping("group")
@@ -36,20 +32,20 @@ public class GroupAction extends BaseAction {
 		// TODO Auto-generated method stub
 		return "group.jsp";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(params = "type=getGroupByUser")
-	public String getGroupByUser() {
-		UserDomain userDomain = (UserDomain)UserUtils.getPrincipal().getUser();
+	public Object getGroupByUser() {
+		UserDomain userDomain = (UserDomain) UserUtils.getPrincipal().getUser();
 		List<GroupDomain> list = groupservice.findGroupByUser(userDomain);
-		return JSONUtil.toJsonString(list);
+		return list;
 	}
 
 	@ResponseBody
 	@RequestMapping(params = "type=getGroupInfo")
-	public String getGroupInfo(GroupDomain groupDomain) {
+	public Object getGroupInfo(GroupDomain groupDomain) {
 		GroupDomain group = groupservice.getGroupInfo(groupDomain);
-		return JSONUtil.toJsonString(group);
+		return group;
 	}
 
 }

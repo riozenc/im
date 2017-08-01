@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.riozenc.quicktool.common.util.json.JSONUtil;
-import com.riozenc.quicktool.common.util.xml.XmlUtils;
-
 import ims.common.Common;
-import ims.common.xml.XmlResultBean;
 import ims.webapp.BaseAction;
+import ims.webapp.ResultBean;
 import ims.webapp.acc.domain.CompanyDomain;
 import ims.webapp.acc.domain.DepartmentDomain;
 import ims.webapp.acc.service.IDepartmentService;
@@ -36,7 +33,7 @@ public class DepartmentAction extends BaseAction {
 	@Autowired
 	@Qualifier("departmentServiceImpl")
 	private IDepartmentService departmentService;
-	
+
 	@Override
 	public String getIndex() {
 		// TODO Auto-generated method stub
@@ -44,27 +41,26 @@ public class DepartmentAction extends BaseAction {
 	}
 
 	@RequestMapping(params = "type=insert")
-	public String insert(DepartmentDomain departmentDomain) {
+	public Object insert(DepartmentDomain departmentDomain) {
 		if (departmentService.insert(departmentDomain) == 1) {
 
-			return XmlUtils.object2xml(new XmlResultBean(Common.SUCCESS, "添加成功."));
+			return new ResultBean(Common.SUCCESS, "添加成功.");
 		} else {
-			return XmlUtils.object2xml(new XmlResultBean(Common.FAILD, "添加失败."));
+			return new ResultBean(Common.FAILD, "添加失败.");
 		}
 	}
 
 	@ResponseBody
 	@RequestMapping(params = "type=getDepartment")
-	public String getDepartment(DepartmentDomain departmentDomain) {
+	public Object getDepartment(DepartmentDomain departmentDomain) {
 		List<DepartmentDomain> list = departmentService.findByWhere(departmentDomain);
-		return JSONUtil.toJsonString(list);
+		return list;
 	}
 
 	@ResponseBody
 	@RequestMapping(params = "type=findDeparmentByCompany")
-	public String findDeparmentByCompany(CompanyDomain companyDomain) {
+	public Object findDeparmentByCompany(CompanyDomain companyDomain) {
 		List<DepartmentDomain> list = departmentService.findDeparmentByCompany(companyDomain);
-
-		return JSONUtil.toJsonString(list);
+		return list;
 	}
 }
