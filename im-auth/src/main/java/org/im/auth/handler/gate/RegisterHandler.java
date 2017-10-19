@@ -19,8 +19,8 @@ import io.netty.channel.ChannelHandlerContext;
 public class RegisterHandler extends IMHandler {
 	private static final Logger logger = LoggerFactory.getLogger(RegisterHandler.class);
 
-	public RegisterHandler(String userid, Message msg, ChannelHandlerContext ctx) {
-		super(userid, msg, ctx);
+	public RegisterHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
+		super(userid,netid, msg, ctx);
 	}
 
 	@Override

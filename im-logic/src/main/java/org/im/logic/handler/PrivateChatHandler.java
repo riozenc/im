@@ -18,7 +18,7 @@ public class PrivateChatHandler extends IMHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(PrivateChatHandler.class);
 
-	protected PrivateChatHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
+	public PrivateChatHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
 		super(userid, netid, msg, ctx);
 		// TODO Auto-generated constructor stub
 	}

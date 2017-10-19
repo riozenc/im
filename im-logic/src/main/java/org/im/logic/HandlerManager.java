@@ -27,6 +27,7 @@ public class HandlerManager {
 		try {
 			Constructor<? extends IMHandler> constructor = handler.getConstructor(String.class, long.class,
 					Message.class, ChannelHandlerContext.class);
+
 			_handlers.put(order, constructor);
 		} catch (NoSuchMethodException e) {
 			throw new RuntimeException(e);

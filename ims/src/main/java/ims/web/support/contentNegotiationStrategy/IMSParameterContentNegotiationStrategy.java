@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.accept.ParameterContentNegotiationStrategy;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import com.riozenc.quicktool.common.util.cryption.en.WebPasswordUtils;
+
 public class IMSParameterContentNegotiationStrategy extends ParameterContentNegotiationStrategy {
 
 	private String defaultMediaTypeKey = "json";
@@ -29,4 +31,5 @@ public class IMSParameterContentNegotiationStrategy extends ParameterContentNego
 		return super.getMediaTypeKey(request) == null ? defaultMediaTypeKey : super.getMediaTypeKey(request);
 	}
 
+	
 }

@@ -82,7 +82,7 @@ public class BaseInterceptor extends HandlerInterceptorAdapter {
 		LogUtil.getLogger(LOG_TYPE.OTHER)
 				.info("[" + DateUtil.formatDateTime(new Date()) + "]{" + HttpUtils.getRemoteAddr(httpServletRequest)
 						+ "} 执行" + getClassMethod(object) + "[" + httpServletRequest.getMethod() + "]");
-
+		
 		// if (RequestMethod.GET.name().equals(httpServletRequest.getMethod()))
 		// {
 		// // 只支持GET方法

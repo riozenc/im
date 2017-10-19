@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.riozenc.quicktool.common.util.StringUtils;
 
 import ims.common.Common;
+import ims.common.cache.LoginSessionCache;
 import ims.common.security.Principal;
 import ims.common.security.filter.PasswordShiroFilter;
+import ims.common.security.util.UserTokenUtils;
 import ims.webapp.BaseAction;
 import ims.webapp.ResultBean;
 
@@ -49,7 +51,9 @@ public class LoginAction extends BaseAction {
 			}
 
 			// 生成私钥 和 登录密钥
-			return principal.getUser();
+			principal.setToken(UserTokenUtils.createToken(principal.getUserId()));
+			LoginSessionCache.put(principal.getUserId(), principal.getToken());
+			return principal;
 		} else {
 			// 失败
 			return loginFail(errorClassName, httpServletRequest, httpServletResponse);

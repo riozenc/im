@@ -19,9 +19,9 @@ import io.netty.channel.ChannelHandlerContext;
 public class GreetHandler extends IMHandler {
 	private static final Logger logger = LoggerFactory.getLogger(GreetHandler.class);
 
-	protected GreetHandler(String userid, Message msg, ChannelHandlerContext ctx) {
-		super(userid, msg, ctx);
+	public GreetHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
 		// TODO Auto-generated constructor stub
+		super(userid, netid, msg, ctx);
 	}
 
 	@Override

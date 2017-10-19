@@ -56,7 +56,7 @@ public class KickoutSessionFilter extends AdviceFilter {
 	 *             if there is any error.
 	 */
 	protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-		System.out.println("preHandle");
+		System.out.println("KickoutSessionFilter preHandle");
 
 		ShiroHttpServletRequest shiroHttpServletRequest = ((ShiroHttpServletRequest) request);
 		String uri = shiroHttpServletRequest.getRequestURI();
@@ -135,7 +135,7 @@ public class KickoutSessionFilter extends AdviceFilter {
 	 */
 	@SuppressWarnings({ "UnusedDeclaration" })
 	protected void postHandle(ServletRequest request, ServletResponse response) throws Exception {
-		System.out.println("postHandle");
+		System.out.println("KickoutSessionFilter postHandle");
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class KickoutSessionFilter extends AdviceFilter {
 	@SuppressWarnings({ "UnusedDeclaration" })
 	public void afterCompletion(ServletRequest request, ServletResponse response, Exception exception)
 			throws Exception {
-		System.out.println("afterCompletion");
+		System.out.println("KickoutSessionFilter afterCompletion");
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class KickoutSessionFilter extends AdviceFilter {
 	 *             if there is any error executing the chain.
 	 */
 	protected void executeChain(ServletRequest request, ServletResponse response, FilterChain chain) throws Exception {
-		System.out.println("executeChain");
+		System.out.println("KickoutSessionFilter executeChain");
 		chain.doFilter(request, response);
 	}
 
@@ -206,7 +206,7 @@ public class KickoutSessionFilter extends AdviceFilter {
 	 */
 	public void doFilterInternal(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
-		System.out.println("doFilterInternal");
+		System.out.println("KickoutSessionFilter doFilterInternal");
 		Exception exception = null;
 
 		try {
@@ -257,7 +257,7 @@ public class KickoutSessionFilter extends AdviceFilter {
 	 */
 	protected void cleanup(ServletRequest request, ServletResponse response, Exception existing)
 			throws ServletException, IOException {
-		System.out.println("cleanup");
+		System.out.println("KickoutSessionFilter cleanup");
 		Exception exception = existing;
 		try {
 			afterCompletion(request, response, exception);

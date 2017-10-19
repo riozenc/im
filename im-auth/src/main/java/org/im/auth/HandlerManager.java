@@ -24,7 +24,7 @@ public class HandlerManager {
 	private static final Map<Integer, Constructor<? extends IMHandler>> _handlers = new HashMap<>();
 
 	public static void register(Class<? extends Message> msg, Class<? extends IMHandler> handler) {
-
+		
 		int order = ParseMap.getOrder(msg);
 		try {
 			Constructor<? extends IMHandler> constructor = handler.getConstructor(String.class, long.class,
