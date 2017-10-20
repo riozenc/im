@@ -16,6 +16,9 @@ import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -49,7 +52,10 @@ public class AuthLogicHandler extends SimpleChannelInboundHandler<Message> {
 	private void sendGreet2Logic() {
 		GreetBean greetBean = new GreetBean();
 		greetBean.setType(GreetBean.GREET_AUTH);
-		getAuthLogicChannelHandlerContext().writeAndFlush(greetBean.message2Byte());
+		ByteBuf buf = Unpooled.buffer();
+		buf.writeBytes(greetBean.message2Byte());
+		ChannelFuture cf = getAuthLogicChannelHandlerContext().writeAndFlush(buf);
+		System.out.println(cf.toString());
 		logger.info("Auth send Green to Logic.");
 	}
 
