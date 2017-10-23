@@ -12,8 +12,11 @@ import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.riozenc.quicktool.config.Global;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
@@ -29,9 +32,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		int length = in.readableBytes();
 		int size = 0;
 
-//		ByteBuf byteBuf = Unpooled.buffer(length);
-//		ByteBuf byteBuf = Unpooled.directBuffer(length);
-		ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(length);//使用内存池分配器创建直接内存缓冲区
+		ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(length);// 使用内存池分配器创建直接内存缓冲区
 
 		if (in.readableBytes() < 3) {
 			logger.info("readableBytes length less than 3 bytes, ignored");
@@ -41,20 +42,42 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 		in.readBytes(byteBuf);
 
-		byte[] bs = byteBuf.array();// 获取数据
-
 		// 判断fe fe fe
-		if (coverByte(bs[0]) != 0xFE || coverByte(bs[1]) != 0xFE || coverByte(bs[2]) != 0xFE) {
-			logger.info("head is not FE FE FE, ignored");
-			in.resetReaderIndex();
+		if (coverByte(byteBuf.readByte()) != 0xFE) {
 			return;
 		}
+
+		if (coverByte(byteBuf.readByte()) != 0xFE) {
+			return;
+		}
+
+		if (coverByte(byteBuf.readByte()) != 0xFE) {
+			return;
+		}
+		
+		//判断版本号
+		if (coverByte(byteBuf.readByte()) != Byte.parseByte(Global.getConfig("protocol-version"))) {
+			return;
+		}
+		
+		//
+		byteBuf.readerIndex(8);
+		
+		
+		byte[] bs = new byte[byteBuf.readableBytes()];
+		byteBuf.readBytes(bs);
+
+		// 判断fe fe fe
+//		if (coverByte(bs[0]) != 0xFE || coverByte(bs[1]) != 0xFE || coverByte(bs[2]) != 0xFE) {
+//			logger.info("head is not FE FE FE, ignored");
+//			in.resetReaderIndex();
+//			return;
+//		}
 		size += 3;
 
 		// 判断 版本号 //兼容性判断,功能待定
 		if (bs[3] != 99) {
 			logger.info("data version is error, ignored");
-			in.resetReaderIndex();
 			return;
 		}
 		size += 1;

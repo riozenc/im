@@ -14,6 +14,8 @@ import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -24,6 +26,7 @@ public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		System.out.println(1);
 	}
 
 	@Override
