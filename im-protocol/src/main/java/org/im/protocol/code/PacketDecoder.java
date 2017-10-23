@@ -8,6 +8,7 @@ package org.im.protocol.code;
 import java.util.List;
 
 import org.im.protocol.analysis.ParseMap;
+import org.im.protocol.msg.AbstractMessage;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,6 @@ import com.riozenc.quicktool.config.Global;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
@@ -28,105 +28,61 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		// TODO Auto-generated method stub
 
 		in.markReaderIndex();
-
 		int length = in.readableBytes();
-		int size = 0;
-
-		ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(length);// 使用内存池分配器创建直接内存缓冲区
-
-		if (in.readableBytes() < 3) {
-			logger.info("readableBytes length less than 3 bytes, ignored");
+		if (length < AbstractMessage.getBaseLength()) {
+			logger.info("readableBytes length less than " + AbstractMessage.getBaseLength() + " bytes, ignored");
 			in.resetReaderIndex();
 			return;
 		}
 
-		in.readBytes(byteBuf);
-
 		// 判断fe fe fe
-		if (coverByte(byteBuf.readByte()) != 0xFE) {
+		if (coverByte(in.readByte()) != 0xFE) {
 			return;
 		}
 
-		if (coverByte(byteBuf.readByte()) != 0xFE) {
+		if (coverByte(in.readByte()) != 0xFE) {
 			return;
 		}
 
-		if (coverByte(byteBuf.readByte()) != 0xFE) {
+		if (coverByte(in.readByte()) != 0xFE) {
 			return;
 		}
-		
-		//判断版本号
-		if (coverByte(byteBuf.readByte()) != Byte.parseByte(Global.getConfig("protocol-version"))) {
+
+		// 判断版本号
+		if (coverByte(in.readByte()) != Integer.parseInt(Global.getConfig("protocol-version"))) {
 			return;
 		}
-		
-		//
-		byteBuf.readerIndex(8);
-		
-		
-		byte[] bs = new byte[byteBuf.readableBytes()];
+
+		// 跳过8位（个人ID和命令）
+		in.readerIndex(3 + 1 + 8);
+		// 数据长度
+		byte[] dataLengthBytes = new byte[4];
+		in.readBytes(dataLengthBytes);
+		int dataLength = getDataLength(dataLengthBytes);
+		if (length < dataLength + AbstractMessage.getBaseLength()) {
+			logger.info("readableBytes length less than " + (dataLength + AbstractMessage.getBaseLength())
+					+ " bytes, wating");
+			in.resetReaderIndex();
+			return;
+		}
+		in.readerIndex(dataLength + AbstractMessage.getBaseLength() - 1);// 固定长度+数据长度
+		// 判断结束符
+		if (coverByte(in.readByte()) != 0x16) {
+			return;
+		}
+		in.resetReaderIndex();// 重置，读取完整的一条数据
+		ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.directBuffer(AbstractMessage.getBaseLength() + dataLength);// 使用内存池分配器创建直接内存缓冲区
+		in.readBytes(byteBuf);
+		byte[] bs = new byte[AbstractMessage.getBaseLength() + dataLength];
 		byteBuf.readBytes(bs);
 
-		// 判断fe fe fe
-//		if (coverByte(bs[0]) != 0xFE || coverByte(bs[1]) != 0xFE || coverByte(bs[2]) != 0xFE) {
-//			logger.info("head is not FE FE FE, ignored");
-//			in.resetReaderIndex();
-//			return;
-//		}
-		size += 3;
-
-		// 判断 版本号 //兼容性判断,功能待定
-		if (bs[3] != 99) {
-			logger.info("data version is error, ignored");
-			return;
-		}
-		size += 1;
-
-		// 获取uuid
-		String UID = new String("" + bs[4] + bs[5] + bs[6] + bs[7]);
-		size += 4;
-		String order = new String("" + bs[8] + bs[9] + bs[10] + bs[11]);
-		size += 4;
-		String dataLength = new String("" + bs[12] + bs[13] + bs[14] + bs[15]);
-		size += 4;
-		byte[] body = new byte[Integer.parseInt(dataLength)];
-		System.arraycopy(bs, size, body, 0, body.length);
-		size += body.length;
-
-		int year = bs[size];
-		size += 1;
-		int month = bs[size];
-		size += 1;
-		int day = bs[size];
-		size += 1;
-		int hour = bs[size];
-		size += 1;
-		int minute = bs[size];
-		size += 1;
-		int second = bs[size];
-		size += 1;
-
-		String date = 2000 + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-
-		int encryption = bs[size];
-		size += 1;
-
-		String crc = new String("" + bs[size] + bs[size + 1] + bs[size + 2]);
-		size += 3;
-
-		if (coverByte(bs[length - 1]) != 0xFE) {
-			logger.info("end is not FE, ignored");
-			in.resetReaderIndex();
-			return;
-		}
+		byte[] orderBytes = new byte[4];
+		System.arraycopy(bs, 3 + 1 + 4, orderBytes, 0, orderBytes.length);
+		int order = Integer.parseInt("" + orderBytes[0] + orderBytes[1] + orderBytes[2] + orderBytes[3], 16);
 
 		try {
-
 			// 消息体转对象
-
-			Message msg = ParseMap.getMessage(Integer.parseInt(order, 16), body);
-			msg.setOrder(Integer.parseInt(order, 16));
-			msg.setUID(UID);
+			Message msg = ParseMap.getMessage(order, bs);
 
 			out.add(msg);
 			logger.info("GateServer Received Message: content length {}, order: {}", length, order);
@@ -138,6 +94,10 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 	private int coverByte(byte b) {
 		return b & 0xFF;
+	}
+
+	private int getDataLength(byte[] bs) {
+		return Integer.parseInt("" + bs[0] + bs[1] + bs[2] + bs[3]);
 	}
 
 }

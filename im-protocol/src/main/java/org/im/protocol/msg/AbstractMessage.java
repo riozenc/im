@@ -32,11 +32,13 @@ public abstract class AbstractMessage implements Message {
 	private byte[] data;// 数据 长度等于length
 	private byte[] date = new byte[6];// 数据时间 长度6 年月日时分秒
 	private byte encryption;// 加密方式 长度1
-	private byte[] crc = new byte[3];// 校验 长度2
-	private byte end = (byte) 254;// 结束符
+	private byte[] crc = new byte[3];// 校验 长度3
+	private byte end = (byte) 22;// 结束符
 
 	private String UID;
 	private int order;
+	private String dateTime;
+	private long netId;
 
 	protected byte[] getHeads() {
 		return heads;
@@ -89,13 +91,7 @@ public abstract class AbstractMessage implements Message {
 	@Override
 	public Message byte2Message(byte[] bs) {
 		// TODO Auto-generated method stub
-		try {
-			return DataXmlTool.xml2Bean(bs, this);
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		return DataPackageTool.unpackageMessage(this, bs);
 	}
 
 	public byte[] toXmlByte() {
@@ -109,25 +105,37 @@ public abstract class AbstractMessage implements Message {
 		return byte2Message(bytes);
 	}
 
-	@Override
 	public String getUID() {
 		// TODO Auto-generated method stub
 		return UID;
 	}
 
-	@Override
 	public void setUID(String UID) {
 		this.UID = UID;
 	}
 
-	@Override
 	public int getOrder() {
 		return order;
 	}
 
-	@Override
 	public void setOrder(int order) {
 		this.order = order;
+	}
+
+	public String getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(String dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public long getNetId() {
+		return this.netId;
+	}
+
+	public static int getBaseLength() {
+		return 27;
 	}
 
 }

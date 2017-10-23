@@ -10,6 +10,8 @@ package org.im.auth.bean;
 public class AuthBean {
 	private String ip;
 	private int port;
+	
+	
 	public String getIp() {
 		return ip;
 	}

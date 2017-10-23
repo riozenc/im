@@ -10,6 +10,8 @@ import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -40,7 +42,9 @@ public class GateLogicHandler extends SimpleChannelInboundHandler<Message> {
 	private void sendGreet2Logic() {
 		GreetBean greetBean = new GreetBean();
 		greetBean.setType(GreetBean.GREET_LOGIC);
-		getGatelogicChannelHandlerContext().writeAndFlush(greetBean.message2Byte());
+		ByteBuf buf = Unpooled.buffer();
+		buf.writeBytes(greetBean.message2Byte());
+		getGatelogicChannelHandlerContext().writeAndFlush(buf);
 		logger.info("Gate send Green to Logic.");
 	}
 }

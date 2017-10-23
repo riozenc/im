@@ -7,13 +7,17 @@
  */
 package org.im.protocol;
 
+import java.lang.reflect.Field;
+
 import org.dom4j.DocumentException;
+import org.im.protocol.bean.GreetBean;
 import org.im.protocol.bean.RegisterBean;
 
+import com.riozenc.quicktool.common.util.reflect.ReflectUtil;
 import com.riozenc.quicktool.common.util.xml.XmlParseUtils;
 
 public class TEST {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		// <gate>
 		// <id value="1"/>
@@ -26,10 +30,13 @@ public class TEST {
 		// <logicbean ip="127.0.0.1" port="7070"/>
 		// </gate>
 
-		String xml = "<registerbean><userId>chiziyue</userId><password>123123</password></registerbean>";
+		// String xml =
+		// "<registerbean><userId>chiziyue</userId><password>123123</password></registerbean>";
+		//
+		// RegisterBean bean = new RegisterBean();
+		// bean = (RegisterBean) bean.byte2Message(xml.getBytes());
+		// System.out.println(bean.getUserId());
 
-		RegisterBean bean = new RegisterBean();
-		bean = (RegisterBean) bean.byte2Message(xml.getBytes());
-		System.out.println(bean.getUserId());
+		
 	}
 }

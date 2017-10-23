@@ -20,11 +20,10 @@ public interface Message {
 
 	public Message byte2Message(byte[] bs);
 
-	public int getOrder();// 命令
-
-	public void setOrder(int order);
-
 	public String getUID();
 
-	public void setUID(String UID);
+	public int getOrder();
+	
+	public long getNetId();
+
 }

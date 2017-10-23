@@ -7,6 +7,7 @@ package org.im.protocol.msg;
 
 import java.util.Calendar;
 
+import org.dom4j.DocumentException;
 import org.im.protocol.analysis.ParseMap;
 
 import com.riozenc.quicktool.config.Global;
@@ -32,8 +33,8 @@ public class DataPackageTool {
 		// 数据
 		byte[] data = message.toXmlByte();
 		// 数据长度
-		 byte[] dataLength = string2byte(String.valueOf(data.length), 4);
-//		byte[] dataLength = string2byte(Integer.toHexString(data.length), 4);
+		byte[] dataLength = string2byte(String.valueOf(data.length), 4);
+		// byte[] dataLength = string2byte(Integer.toHexString(data.length), 4);
 
 		// 时间
 		byte[] date = getDate();
@@ -69,6 +70,55 @@ public class DataPackageTool {
 			return messageByte;
 		}
 		return null;
+	}
+
+	public static Message unpackageMessage(AbstractMessage message, byte[] bs) {
+		// 开始组装
+		int size = 0;
+		size += 3;// FE FE FE
+		size += 1;// version
+		// 获取uuid
+		String UID = new String("" + bs[4] + bs[5] + bs[6] + bs[7]);
+		size += 4;
+		String order = new String("" + bs[8] + bs[9] + bs[10] + bs[11]);
+		size += 4;
+		int dataLength = Integer.parseInt("" + bs[12] + bs[13] + bs[14] + bs[15]);
+		size += 4;
+		byte[] body = new byte[dataLength];
+		System.arraycopy(bs, size, body, 0, body.length);
+		size += body.length;
+
+		int year = bs[size];
+		size += 1;
+		int month = bs[size];
+		size += 1;
+		int day = bs[size];
+		size += 1;
+		int hour = bs[size];
+		size += 1;
+		int minute = bs[size];
+		size += 1;
+		int second = bs[size];
+		size += 1;
+
+		String date = 2000 + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+
+		int encryption = bs[size];
+		size += 1;
+
+		String crc = new String("" + bs[size] + bs[size + 1] + bs[size + 2]);
+		size += 3;
+
+		message.setOrder(Integer.parseInt(order, 16));
+		message.setUID(UID);
+		message.setDateTime(date);
+		try {
+			DataXmlTool.xml2Bean(body, message);
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return message;
 	}
 
 	private static int copyByte(byte[] src, byte[] des, int location) {

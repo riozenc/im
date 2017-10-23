@@ -6,6 +6,7 @@
 package org.im.logic.starter;
 
 import org.dom4j.Element;
+import org.im.logic.Worker;
 import org.im.logic.bean.LogicBean;
 import org.im.logic.server.DefaultLogicServer;
 import org.slf4j.Logger;
@@ -28,7 +29,8 @@ public class LogicStarter {
 			Element element = XmlParseUtils.readXml(Global.getConfig("xml"));
 
 			LogicBean logicBean = XmlParseUtils.xmlToBean(element, LogicBean.class);
-
+			Worker.startWorker(workNum);//工作组
+			
 			new Thread(() -> {
 				DefaultLogicServer.startLogic(logicBean.getPort());
 			}).start();

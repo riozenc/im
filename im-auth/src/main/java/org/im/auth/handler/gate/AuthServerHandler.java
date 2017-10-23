@@ -50,9 +50,10 @@ public class AuthServerHandler extends SimpleChannelInboundHandler<Message> {
 		int order = ParseMap.getOrder(msg.getClass());
 		IMHandler handler;
 		if (msg instanceof GreetBean) {
-			handler = HandlerManager.getHandler(order, msg.getUID(), msg, ctx);
+			handler = HandlerManager.getHandler(order, msg.getUID(), msg.getNetId(), msg, ctx);
 		} else {
-			handler = HandlerManager.getHandler(order, msg.getUID(), msg, getGateAuthChannelHandlerContext());
+			handler = HandlerManager.getHandler(order, msg.getUID(), msg.getNetId(), msg,
+					getGateAuthChannelHandlerContext());
 		}
 		Worker.dispatch(msg.getUID(), handler);
 	}

@@ -14,8 +14,6 @@ import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -35,9 +33,10 @@ public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 		int order = ParseMap.getOrder(msg.getClass());
 		IMHandler handler;
 		if (msg instanceof GreetBean) {
-			handler = HandlerManager.getHandler(order, msg.getUID(), msg, ctx);
+			handler = HandlerManager.getHandler(order, msg.getUID(), msg.getNetId(), msg, ctx);
 		} else {
-			handler = HandlerManager.getHandler(order, msg.getUID(), msg, getGateLogicChannelHandlerContext());
+			handler = HandlerManager.getHandler(order, msg.getUID(), msg.getNetId(), msg,
+					getGateLogicChannelHandlerContext());
 		}
 
 		Worker.dispatch(msg.getUID(), handler);

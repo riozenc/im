@@ -5,6 +5,8 @@
 **/
 package org.im.gate.connection;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,14 +15,16 @@ import io.netty.util.AttributeKey;
 
 public class ClientConnection {
 	private static final Logger logger = LoggerFactory.getLogger(ClientConnection.class);
-
+	
+	private static final AtomicLong netidGenerator = new AtomicLong(0);
 	ClientConnection(ChannelHandlerContext c, String UID) {
+		_netId = netidGenerator.incrementAndGet();
 		this.ctx = c;
 		ctx.channel().attr(ClientConnection.UID).set(UID);
 	}
 
 	public static AttributeKey<String> UID = AttributeKey.valueOf("UID");
-
+	private long _netId;
 	private ChannelHandlerContext ctx;
 
 	public String getUID() {
@@ -34,4 +38,7 @@ public class ClientConnection {
 	public ChannelHandlerContext getCtx() {
 		return ctx;
 	}
+	public long getNetId() {
+        return _netId;
+    }
 }

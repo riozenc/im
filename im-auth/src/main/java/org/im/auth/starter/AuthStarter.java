@@ -22,7 +22,7 @@ import com.riozenc.quicktool.config.Global;
 public class AuthStarter {
 	private static final Logger logger = LoggerFactory.getLogger(AuthStarter.class);
 
-	public static int workNum = 1;
+	public static int workNum = 5;
 	public static Worker[] workers;
 
 	public static void main(String[] args) throws Exception {
@@ -34,6 +34,9 @@ public class AuthStarter {
 		Element element = XmlParseUtils.readXml(Global.getConfig("xml"));
 		AuthBean authBean = XmlParseUtils.xmlToBean(element, AuthBean.class);
 		LogicBean logicBean = XmlParseUtils.xmlToBean(element, LogicBean.class);
+		
+		Worker.startWorker(workNum);
+		
 		new Thread(() -> AuthServer.startAuthServer(authBean.getPort())).start();
 
 		new Thread(() -> DefaultAuthLogicServer.startAuthLogicConnection(logicBean.getIp(), logicBean.getPort()))

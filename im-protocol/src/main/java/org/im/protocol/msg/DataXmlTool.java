@@ -35,8 +35,6 @@ public class DataXmlTool {
 		}
 		Field[] fields = clazz.getDeclaredFields();// 不需要上级属性
 		for (Field field : fields) {
-			// 设置字段可访问（必须，否则报错）
-			field.setAccessible(true);
 			// 得到字段的属性名
 			String name = field.getName();
 			Element fieldElement = element.element(name);

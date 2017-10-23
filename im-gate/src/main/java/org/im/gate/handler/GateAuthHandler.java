@@ -11,6 +11,8 @@ import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -51,7 +53,9 @@ public class GateAuthHandler extends SimpleChannelInboundHandler<Message> {
 		// 向auth送Greet协议
 		GreetBean greetBean = new GreetBean();
 		greetBean.setType(GreetBean.GREET_AUTH);
-		getGateAuthChannelHandlerContext().writeAndFlush(greetBean.message2Byte());
+		ByteBuf buf = Unpooled.buffer();
+		buf.writeBytes(greetBean.message2Byte());
+		getGateAuthChannelHandlerContext().writeAndFlush(buf);
 		logger.info("Gate send Green to Auth.");
 	}
 }

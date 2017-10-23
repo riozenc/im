@@ -34,7 +34,7 @@ public class HandlerManager {
 		}
 	}
 
-	public static IMHandler getHandler(int order, String userId, Message msg, ChannelHandlerContext ctx)
+	public static IMHandler getHandler(int order, String userId, long netId, Message msg, ChannelHandlerContext ctx)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException {
 		Constructor<? extends IMHandler> constructor = _handlers.get(order);
 		if (constructor == null) {
@@ -42,7 +42,7 @@ public class HandlerManager {
 			return null;
 		}
 
-		return constructor.newInstance(userId, msg, ctx);
+		return constructor.newInstance(userId, netId, msg, ctx);
 	}
 
 	public static void initHandlers() {
