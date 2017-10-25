@@ -35,4 +35,21 @@ public class PrivateChatBean extends AbstractMessage {
 		return content;
 	}
 
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public void setDateTime(String dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+
 }

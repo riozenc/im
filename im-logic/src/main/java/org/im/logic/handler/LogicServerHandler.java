@@ -24,7 +24,6 @@ public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		System.out.println(1);
 	}
 
 	@Override
@@ -33,13 +32,12 @@ public class LogicServerHandler extends SimpleChannelInboundHandler<Message> {
 		int order = ParseMap.getOrder(msg.getClass());
 		IMHandler handler;
 		if (msg instanceof GreetBean) {
-			handler = HandlerManager.getHandler(order, msg.getUID(), msg.getNetId(), msg, ctx);
+			handler = HandlerManager.getHandler(order, msg.getUid(), msg, ctx);
 		} else {
-			handler = HandlerManager.getHandler(order, msg.getUID(), msg.getNetId(), msg,
-					getGateLogicChannelHandlerContext());
+			handler = HandlerManager.getHandler(order, msg.getUid(), msg, getGateLogicChannelHandlerContext());
 		}
 
-		Worker.dispatch(msg.getUID(), handler);
+		Worker.dispatch(msg.getUid(), handler);
 	}
 
 	@Override

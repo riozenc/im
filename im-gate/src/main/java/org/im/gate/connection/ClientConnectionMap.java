@@ -15,61 +15,99 @@ import io.netty.channel.ChannelHandlerContext;
 public class ClientConnectionMap {
 	private static final Logger logger = LoggerFactory.getLogger(ClientConnectionMap.class);
 
+	public static ConcurrentHashMap<Long, ClientConnection> allClientMap = new ConcurrentHashMap<>();
 	public static ConcurrentHashMap<String, ClientConnection> registerClientMap = new ConcurrentHashMap<>(1024);
+	private static ConcurrentHashMap<Long, String> uid2netidMap = new ConcurrentHashMap<>();
 
 	/**
-	 * 从注册列表中获取ClientConnection，不存在则新建
+	 * 从注册列表中获取ClientConnection
 	 * 
 	 * @param ctx
 	 * @return
 	 */
 	public static ClientConnection getClientConnection(ChannelHandlerContext ctx) {
-		String UID = ctx.channel().attr(ClientConnection.UID).get();
-		if (UID == null)
-			return new ClientConnection(ctx, UID);
-		ClientConnection conn = registerClientMap.get(UID);
+		Long netId = ctx.channel().attr(ClientConnection.NETID).get();
+		ClientConnection conn = allClientMap.get(netId);
 		if (conn != null)
 			return conn;
 		else {
-			logger.error("ClientConenction not found in allClientMap, UID: {}", UID);
+			// 线程隐患
+			if (uid2netidMap.get(netId) != null) {
+				conn = registerClientMap.get(uid2netidMap.get(netId));
+				return conn;
+			}
+			logger.error("ClientConenction not found in allClientMap, netId: {}", netId);
 		}
 		return null;
 	}
 
-	public static ClientConnection getClientConnection(String UID) {
-		ClientConnection conn = registerClientMap.get(UID);
+	public static ClientConnection getClientConnection(long netId) {
+		ClientConnection conn = allClientMap.get(netId);
 		if (conn != null)
 			return conn;
 		else {
-			logger.error("ClientConenction not found in allClientMap, UID: {}", UID);
+			logger.error("ClientConenction not found in allClientMap, netId: {}", netId);
 		}
 		return null;
 	}
 
-	public static void addClientConnection(ClientConnection c, String UID) {
-
-		ClientConnection conn = new ClientConnection(c.getCtx(), UID);
-
-		ClientConnection oldConn = ClientConnectionMap.registerClientMap.putIfAbsent(conn.getUID(), conn);
-		if (oldConn != null) {
-			// 踢掉原来的连接
-			removeClientConnection(oldConn.getCtx());
-			logger.error("UID: {} remove old connection.", oldConn.getUID());
-			registerClientMap.put(UID, conn);
+	public static ClientConnection getClientConnection(String uid) {
+		ClientConnection conn = registerClientMap.get(uid);
+		if (conn != null)
+			return conn;
+		else {
+			logger.error("ClientConenction not found in allClientMap, uid: {}", uid);
 		}
+		return null;
+	}
+
+	public static void addClientConnection(ChannelHandlerContext c) {
+		// fixme 之后重复登录需要踢掉原来的连接
+		ClientConnection conn = new ClientConnection(c);
+		if (ClientConnectionMap.allClientMap.putIfAbsent(conn.getNetId(), conn) != null) {
+			ClientConnection old = ClientConnectionMap.allClientMap.put(conn.getNetId(), conn);
+			old.getCtx().close();
+			logger.error("Duplicated netid");
+		}
+	}
+
+	public static void registerUid(String uid, long netId) {
+		if (uid2netidMap.putIfAbsent(netId, uid) == null) {
+			ClientConnection conn = ClientConnectionMap.getClientConnection(netId);
+			if (conn != null) {
+				conn.setUid(uid);
+				allClientMap.remove(conn.getNetId());
+				ClientConnection oldConn = ClientConnectionMap.registerClientMap.putIfAbsent(conn.getUid(), conn);
+				if (oldConn == null) {
+					// 不处理
+				} else {
+					removeClientConnection(oldConn.getCtx());
+					registerClientMap.put(conn.getUid(), conn);
+					logger.error("UID: {}  reconnection.", oldConn.getUid());
+				}
+
+			} else {
+				logger.error("{} ClientConnection is null", uid);
+				// 重连
+				return;
+			}
+		} else {
+			logger.error("uid: {} has registered in uid2netidMap", uid);
+		}
+
 	}
 
 	public static void removeClientConnection(ChannelHandlerContext c) {
 		ClientConnection conn = getClientConnection(c);
-		String UID = conn.getUID();
-
-		if (ClientConnectionMap.registerClientMap.remove(UID) != null) {
-			logger.error("UID: {} is remove allClientMap", UID);
+		Long netid = conn.getNetId();
+		allClientMap.remove(netid);
+		if (ClientConnectionMap.registerClientMap.remove(conn.getUid()) != null) {
+			logger.error("uid: {} is remove allClientMap", conn.getUid());
 		} else {
-			logger.error("UID: {} is not exist in allClientMap", UID);
+			logger.error("uid: {} is not exist in allClientMap", conn.getUid());
 		}
 		conn.getCtx().close();
-		logger.info("Client disconnected, UID: {}", UID);
+		logger.info("Client disconnected, netid: {},uid:{}", netid, conn.getUid());
 	}
 
 }

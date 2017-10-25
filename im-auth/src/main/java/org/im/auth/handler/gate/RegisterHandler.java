@@ -19,8 +19,8 @@ import io.netty.channel.ChannelHandlerContext;
 public class RegisterHandler extends IMHandler {
 	private static final Logger logger = LoggerFactory.getLogger(RegisterHandler.class);
 
-	public RegisterHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
-		super(userid,netid, msg, ctx);
+	public RegisterHandler(String uid, Message msg, ChannelHandlerContext ctx) {
+		super(uid, msg, ctx);
 	}
 
 	@Override
@@ -29,7 +29,6 @@ public class RegisterHandler extends IMHandler {
 		String userId = registerBean.getUserId();
 		// 这个userId是有效的
 		UserCache.addUser(userId);
-
 		// 返回注册成功or失败
 		ctx.writeAndFlush(registerBean);//
 	}

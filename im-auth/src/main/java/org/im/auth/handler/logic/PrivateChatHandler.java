@@ -18,8 +18,8 @@ public class PrivateChatHandler extends IMHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(PrivateChatHandler.class);
 
-	public PrivateChatHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
-		super(userid, netid, msg, ctx);
+	public PrivateChatHandler(String uid, Message msg, ChannelHandlerContext ctx) {
+		super(uid, msg, ctx);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -32,7 +32,7 @@ public class PrivateChatHandler extends IMHandler {
 		logger.info("PrivateChat from {} to {} : content {}", privateChatBean.getFrom(), privateChatBean.getTo(),
 				privateChatBean.getContent());
 
-		privateChatBean.setUID(privateChatBean.getTo());
+		privateChatBean.setUid(privateChatBean.getTo());
 		// 是否认证，是否在线等特殊处理
 		ctx.writeAndFlush(privateChatBean);
 	}

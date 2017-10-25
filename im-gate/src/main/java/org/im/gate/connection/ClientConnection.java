@@ -15,20 +15,27 @@ import io.netty.util.AttributeKey;
 
 public class ClientConnection {
 	private static final Logger logger = LoggerFactory.getLogger(ClientConnection.class);
-	
 	private static final AtomicLong netidGenerator = new AtomicLong(0);
-	ClientConnection(ChannelHandlerContext c, String UID) {
-		_netId = netidGenerator.incrementAndGet();
-		this.ctx = c;
-		ctx.channel().attr(ClientConnection.UID).set(UID);
+
+	ClientConnection(ChannelHandlerContext c) {
+		netId = netidGenerator.incrementAndGet();
+		ctx = c;
+		ctx.channel().attr(ClientConnection.NETID).set(netId);
 	}
 
-	public static AttributeKey<String> UID = AttributeKey.valueOf("UID");
-	private long _netId;
-	private ChannelHandlerContext ctx;
+	public static AttributeKey<Long> NETID = AttributeKey.valueOf("netid");
+//	public static AttributeKey<String> UID = AttributeKey.valueOf("UID");
 
-	public String getUID() {
-		return ctx.channel().attr(ClientConnection.UID).get();
+	private ChannelHandlerContext ctx;
+	private long netId;
+	private String uid;
+
+	public long getNetId() {
+		return netId;
+	}
+
+	public String getUid() {
+		return uid;
 	}
 
 	public void setCtx(ChannelHandlerContext ctx) {
@@ -38,7 +45,9 @@ public class ClientConnection {
 	public ChannelHandlerContext getCtx() {
 		return ctx;
 	}
-	public long getNetId() {
-        return _netId;
-    }
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
 }

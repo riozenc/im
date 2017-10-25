@@ -40,13 +40,13 @@ public class AuthLogicHandler extends SimpleChannelInboundHandler<Message> {
 	protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
 		// TODO Auto-generated method stub
 
-		IMHandler handler = HandlerManager.getHandler(msg.getOrder(), msg.getUID(), msg.getNetId(), msg,
+		IMHandler handler = HandlerManager.getHandler(msg.getOrder(), msg.getUid(), msg,
 				AuthServerHandler.getGateAuthChannelHandlerContext());
 		if (handler == null) {
 			logger.error("Error Messgae Type: {}", msg.getClass());
 			return;
 		}
-		Worker.dispatch(msg.getUID(), handler);
+		Worker.dispatch(msg.getUid(), handler);
 	}
 
 	private void sendGreet2Logic() {

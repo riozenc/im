@@ -29,10 +29,10 @@ public class LogicStarter {
 			Element element = XmlParseUtils.readXml(Global.getConfig("xml"));
 
 			LogicBean logicBean = XmlParseUtils.xmlToBean(element, LogicBean.class);
-			Worker.startWorker(workNum);//工作组
-			
+			Worker.startWorker(workNum);// 工作组
 			new Thread(() -> {
 				DefaultLogicServer.startLogic(logicBean.getPort());
+				logger.info("logicServer started");
 			}).start();
 		} catch (Exception e) {
 			e.printStackTrace();

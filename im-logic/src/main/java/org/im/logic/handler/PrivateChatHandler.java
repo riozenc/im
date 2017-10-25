@@ -18,14 +18,15 @@ public class PrivateChatHandler extends IMHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(PrivateChatHandler.class);
 
-	public PrivateChatHandler(String userid, long netid, Message msg, ChannelHandlerContext ctx) {
-		super(userid, netid, msg, ctx);
+	public PrivateChatHandler(String uid, Message msg, ChannelHandlerContext ctx) {
+		super(uid, msg, ctx);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void excute(Worker worker) {
 		// TODO Auto-generated method stub
+
 		PrivateChatBean privateChatBean = (PrivateChatBean) msg;
 
 		// 转发给 auth(logic-->auth)

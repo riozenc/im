@@ -20,10 +20,12 @@ public interface Message {
 
 	public Message byte2Message(byte[] bs);
 
-	public String getUID();
+	public String getUid();
 
 	public int getOrder();
 	
 	public long getNetId();
+	
+	public byte[] getProtocol();
 
 }

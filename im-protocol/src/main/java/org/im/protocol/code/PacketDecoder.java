@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.im.protocol.analysis.ParseMap;
 import org.im.protocol.msg.AbstractMessage;
+import org.im.protocol.msg.DataPackageTool;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,20 +37,20 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		}
 
 		// 判断fe fe fe
-		if (coverByte(in.readByte()) != 0xFE) {
+		if (DataPackageTool.coverByte(in.readByte()) != 0xFE) {
 			return;
 		}
 
-		if (coverByte(in.readByte()) != 0xFE) {
+		if (DataPackageTool.coverByte(in.readByte()) != 0xFE) {
 			return;
 		}
 
-		if (coverByte(in.readByte()) != 0xFE) {
+		if (DataPackageTool.coverByte(in.readByte()) != 0xFE) {
 			return;
 		}
 
 		// 判断版本号
-		if (coverByte(in.readByte()) != Integer.parseInt(Global.getConfig("protocol-version"))) {
+		if (DataPackageTool.coverByte(in.readByte()) != Integer.parseInt(Global.getConfig("protocol-version"))) {
 			return;
 		}
 
@@ -58,7 +59,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		// 数据长度
 		byte[] dataLengthBytes = new byte[4];
 		in.readBytes(dataLengthBytes);
-		int dataLength = getDataLength(dataLengthBytes);
+		int dataLength = Integer.parseInt(DataPackageTool.coverBytes(dataLengthBytes), 16);
 		if (length < dataLength + AbstractMessage.getBaseLength()) {
 			logger.info("readableBytes length less than " + (dataLength + AbstractMessage.getBaseLength())
 					+ " bytes, wating");
@@ -67,7 +68,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		}
 		in.readerIndex(dataLength + AbstractMessage.getBaseLength() - 1);// 固定长度+数据长度
 		// 判断结束符
-		if (coverByte(in.readByte()) != 0x16) {
+		if (DataPackageTool.coverByte(in.readByte()) != 0x16) {
 			return;
 		}
 		in.resetReaderIndex();// 重置，读取完整的一条数据
@@ -78,7 +79,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 		byte[] orderBytes = new byte[4];
 		System.arraycopy(bs, 3 + 1 + 4, orderBytes, 0, orderBytes.length);
-		int order = Integer.parseInt("" + orderBytes[0] + orderBytes[1] + orderBytes[2] + orderBytes[3], 16);
+		int order = Integer.parseInt(DataPackageTool.coverBytes(orderBytes), 16);
 
 		try {
 			// 消息体转对象
@@ -90,14 +91,6 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		} catch (Exception e) {
 			logger.error(ctx.channel().remoteAddress() + ",decode failed.", e);
 		}
-	}
-
-	private int coverByte(byte b) {
-		return b & 0xFF;
-	}
-
-	private int getDataLength(byte[] bs) {
-		return Integer.parseInt("" + bs[0] + bs[1] + bs[2] + bs[3]);
 	}
 
 }

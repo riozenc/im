@@ -56,7 +56,6 @@ public class Client {
 			public void operationComplete(ChannelFuture future) throws Exception {
 				if (future.isSuccess()) {
 					// init registry
-					
 					logger.info("Client[{}] connected Gate Successed...", index);
 				} else {
 					logger.error("Client[{}] connected Gate Failed", index);

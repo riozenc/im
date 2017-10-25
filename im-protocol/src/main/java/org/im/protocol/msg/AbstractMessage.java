@@ -7,8 +7,6 @@ package org.im.protocol.msg;
 
 import java.io.IOException;
 
-import org.dom4j.DocumentException;
-
 import com.riozenc.quicktool.common.util.xml.XmlUtils;
 
 /**
@@ -26,7 +24,7 @@ public abstract class AbstractMessage implements Message {
 	private static final byte[] heads = { (byte) 254, (byte) 254, (byte) 254 };// 头长度3
 
 	private byte version;// 协议版本 长度1
-	private byte[] uidByte = new byte[4];// 指令ID//个人帐号
+	private byte[] uidByte = new byte[4];// 指令ID//个人帐号//长度随机
 	private byte[] orderByte = new byte[4];// 命令 长度4 会补0
 	private byte[] length = new byte[4];// 数据长度 长度4
 	private byte[] data;// 数据 长度等于length
@@ -35,7 +33,8 @@ public abstract class AbstractMessage implements Message {
 	private byte[] crc = new byte[3];// 校验 长度3
 	private byte end = (byte) 22;// 结束符
 
-	private String UID;
+	private byte[] protocol;// 协议
+	private String uid;
 	private int order;
 	private String dateTime;
 	private long netId;
@@ -80,6 +79,10 @@ public abstract class AbstractMessage implements Message {
 		return end;
 	}
 
+	public byte[] getProtocol() {
+		return protocol;
+	}
+
 	@Override
 	public byte[] message2Byte() {
 		// TODO Auto-generated method stub
@@ -91,6 +94,7 @@ public abstract class AbstractMessage implements Message {
 	@Override
 	public Message byte2Message(byte[] bs) {
 		// TODO Auto-generated method stub
+		protocol = bs;
 		return DataPackageTool.unpackageMessage(this, bs);
 	}
 
@@ -105,13 +109,13 @@ public abstract class AbstractMessage implements Message {
 		return byte2Message(bytes);
 	}
 
-	public String getUID() {
+	public String getUid() {
 		// TODO Auto-generated method stub
-		return UID;
+		return uid;
 	}
 
-	public void setUID(String UID) {
-		this.UID = UID;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public int getOrder() {

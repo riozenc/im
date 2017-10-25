@@ -24,8 +24,7 @@ public class DataPackageTool {
 		// 版本号
 		byte version = Byte.parseByte(Global.getConfig("protocol-version"));
 		// uuid
-		byte[] uuid = message.getUIDByte();
-
+		byte[] uuid = string2byte(message.getUid(), 4);
 		int order = ParseMap.getOrder(message.getClass());
 		// String --> byte[]
 		byte[] orderByte = string2byte(Integer.toHexString(order), 4);
@@ -33,8 +32,8 @@ public class DataPackageTool {
 		// 数据
 		byte[] data = message.toXmlByte();
 		// 数据长度
-		byte[] dataLength = string2byte(String.valueOf(data.length), 4);
-		// byte[] dataLength = string2byte(Integer.toHexString(data.length), 4);
+		// byte[] dataLength = string2byte(String.valueOf(data.length), 4);
+		byte[] dataLength = string2byte(Integer.toHexString(data.length), 4);
 
 		// 时间
 		byte[] date = getDate();
@@ -78,11 +77,11 @@ public class DataPackageTool {
 		size += 3;// FE FE FE
 		size += 1;// version
 		// 获取uuid
-		String UID = new String("" + bs[4] + bs[5] + bs[6] + bs[7]);
+		String uid = coverBytes(bs[4], bs[5], bs[6], bs[7]);
 		size += 4;
-		String order = new String("" + bs[8] + bs[9] + bs[10] + bs[11]);
+		int order = Integer.parseInt(coverBytes(bs[8], bs[9], bs[10], bs[11]), 16);
 		size += 4;
-		int dataLength = Integer.parseInt("" + bs[12] + bs[13] + bs[14] + bs[15]);
+		int dataLength = Integer.parseInt(coverBytes(bs[12], bs[13], bs[14], bs[15]), 16);
 		size += 4;
 		byte[] body = new byte[dataLength];
 		System.arraycopy(bs, size, body, 0, body.length);
@@ -106,11 +105,11 @@ public class DataPackageTool {
 		int encryption = bs[size];
 		size += 1;
 
-		String crc = new String("" + bs[size] + bs[size + 1] + bs[size + 2]);
+		String crc = new String("" + coverByte(bs[size]) + coverByte(bs[size + 1]) + coverByte(bs[size + 2]));
 		size += 3;
 
-		message.setOrder(Integer.parseInt(order, 16));
-		message.setUID(UID);
+		message.setOrder(order);
+		message.setUid(uid);
 		message.setDateTime(date);
 		try {
 			DataXmlTool.xml2Bean(body, message);
@@ -119,6 +118,19 @@ public class DataPackageTool {
 			e.printStackTrace();
 		}
 		return message;
+	}
+
+	public static int coverByte(byte b) {
+		return b & 0xFF;
+	}
+
+	public static String coverBytes(byte... bs) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (byte b : bs) {
+			stringBuilder.append(Integer.toHexString(coverByte(b)));
+		}
+		// return Integer.parseInt(stringBuilder.toString(), 16);
+		return stringBuilder.toString();
 	}
 
 	private static int copyByte(byte[] src, byte[] des, int location) {
@@ -153,7 +165,9 @@ public class DataPackageTool {
 
 		int len = stringBuilder.length() / 2;
 		for (int i = 0; i < len; i++) {
-			bs[length - i - 1] = Byte.parseByte(stringBuilder.substring((len - i - 1) * 2, (len - i) * 2));
+			// bs[length - i - 1] = Byte.parseByte(stringBuilder.substring((len - i - 1) *
+			// 2, (len - i) * 2));
+			bs[length - i - 1] = (byte) Integer.parseInt(stringBuilder.substring((len - i - 1) * 2, (len - i) * 2), 16);
 		}
 
 		// for (int i = (stringBuilder.length() / 2) - 1; i >= 0; i--) {

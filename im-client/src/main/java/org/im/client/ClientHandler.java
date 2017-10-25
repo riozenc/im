@@ -1,15 +1,17 @@
 package org.im.client;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.im.protocol.bean.PrivateChatBean;
 import org.im.protocol.bean.RegisterBean;
 import org.im.protocol.msg.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import com.riozenc.quicktool.common.util.date.DateUtil;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -27,30 +29,33 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws IOException {
 		_gateClientConnection = ctx;
-
 		sendTest(ctx);
 	}
 
 	void sendTest(ChannelHandlerContext ctx) {
-
 		RegisterBean registerBean = new RegisterBean();
 		registerBean.setUserId("chiziyue");
-
+		registerBean.setUid("17142");
 		ctx.writeAndFlush(registerBean);
 	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message msg) throws Exception {
 		logger.info("received message: {}", msg.getClass());
-
 		if (msg != null) {
 			_verify = true;
 		}
-
 		// 这样设置的原因是，防止两方都阻塞在输入上
 		if (_verify) {
-
 			Thread.sleep(Client.frequency);
+			
+			PrivateChatBean bean= new PrivateChatBean();
+			bean.setFrom("17142");
+			bean.setTo("17142");
+			bean.setContent("今晚吃什么");
+			bean.setDateTime(DateUtil.formatDateTime(new Date()));
+			bean.setUid("17142");
+			channelHandlerContext.writeAndFlush(bean);
 		}
 	}
 

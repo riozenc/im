@@ -34,19 +34,14 @@ public class GateAuthHandler extends SimpleChannelInboundHandler<Message> {
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		gateAuthChannelHandlerContext = ctx;
 		logger.info("[Gate-Auth] connection is established");
-
 		sendGreet2Auth();// 发送内部协议
-
 	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
 		// TODO Auto-generated method stub
-
-		String uid = msg.getUID();
-		
+		String uid = msg.getUid();
 		ClientConnectionMap.getClientConnection(uid).getCtx().writeAndFlush(msg);
-
 	}
 
 	private void sendGreet2Auth() {

@@ -17,14 +17,13 @@ public class GateServerHandler extends SimpleChannelInboundHandler<Message> {
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
+		ClientConnectionMap.addClientConnection(ctx);
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, Message message) throws Exception {
 		// TODO 最好加一个通知客户端收到消息的通知
-
-		ClientConnection connection = ClientConnectionMap.getClientConnection(message.getUID());
+		ClientConnection connection = ClientConnectionMap.getClientConnection(ctx);
 		ClientMessage.processTransferHandler(message, connection);
 	}
 

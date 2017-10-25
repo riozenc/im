@@ -27,15 +27,15 @@ public class HandlerManager {
 
 		int order = ParseMap.getOrder(msg);
 		try {
-			Constructor<? extends IMHandler> constructor = handler.getConstructor(String.class, long.class,
-					Message.class, ChannelHandlerContext.class);
+			Constructor<? extends IMHandler> constructor = handler.getConstructor(String.class, Message.class,
+					ChannelHandlerContext.class);
 			_handlers.put(order, constructor);
 		} catch (NoSuchMethodException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public static IMHandler getHandler(int order, String userId, long netId, Message msg, ChannelHandlerContext ctx)
+	public static IMHandler getHandler(int order, String userId, Message msg, ChannelHandlerContext ctx)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException {
 		Constructor<? extends IMHandler> constructor = _handlers.get(order);
 		if (constructor == null) {
@@ -43,7 +43,7 @@ public class HandlerManager {
 			return null;
 		}
 
-		return constructor.newInstance(userId, netId, msg, ctx);
+		return constructor.newInstance(userId, msg, ctx);
 	}
 
 	public static void initHandlers() {

@@ -28,7 +28,6 @@ public class GateLogicHandler extends SimpleChannelInboundHandler<Message> {
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		gateLogicChannelHandlerContext = ctx;
 		logger.info("[Gate-Logic] connection is established");
-
 		// 向logic发送Greet
 		sendGreet2Logic();
 	}

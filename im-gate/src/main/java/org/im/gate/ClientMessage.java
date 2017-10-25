@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
 
 public class ClientMessage {
 
@@ -65,13 +67,14 @@ public class ClientMessage {
 	 * @param conn
 	 */
 	public static void transfer2Logic(Message msg, ClientConnection conn) {
-		ByteBuf byteBuf = null;
-		if (conn.getUID() == null) {
+		ByteBuf buf = null;
+		if (conn.getUid() == null) {
 			logger.error("User not login.");
 			return;
 		}
-
-		GateLogicHandler.getGatelogicChannelHandlerContext().writeAndFlush(byteBuf);
+		buf = Unpooled.buffer();
+		buf.writeBytes(msg.getProtocol());
+		GateLogicHandler.getGatelogicChannelHandlerContext().writeAndFlush(buf);
 	}
 
 	/**
@@ -83,7 +86,9 @@ public class ClientMessage {
 	public static void transfer2Auth(Message msg, ClientConnection connection) {
 		RegisterBean bean = (RegisterBean) msg;
 		// 保存客户端连接
-		ClientConnectionMap.addClientConnection(connection, bean.getUID());
-		GateAuthHandler.getGateAuthChannelHandlerContext().writeAndFlush(bean.message2Byte());
+		ClientConnectionMap.registerUid(bean.getUid(), connection.getNetId());
+		ByteBuf buf = Unpooled.buffer();
+		buf.writeBytes(msg.getProtocol());
+		GateAuthHandler.getGateAuthChannelHandlerContext().writeAndFlush(buf);
 	}
 }

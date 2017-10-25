@@ -26,16 +26,16 @@ public class GreetBean extends AbstractMessage {
 	}
 
 	@Override
-	public void setUID(String UID) {
+	public void setUid(String uid) {
 		// TODO Auto-generated method stub
 		// 不予处理，无法修改
 		// throw new RuntimeException("GreetBean userId is final...");
 	}
 
 	@Override
-	public String getUID() {
+	public String getUid() {
 		// TODO Auto-generated method stub
-		return userId;
+		return "000000";
 	}
 
 }
