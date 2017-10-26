@@ -23,8 +23,9 @@ public class DefaultGateAuthServer {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultGateAuthServer.class);
 
 	public static void startGateAuthConnection(String ip, int port) {
+		
+		
 		EventLoopGroup group = new NioEventLoopGroup();
-
 		Bootstrap bootstrap = new Bootstrap().group(group).channel(NioSocketChannel.class)
 				.handler(new ChannelInitializer<SocketChannel>() {
 					@Override
@@ -38,7 +39,13 @@ public class DefaultGateAuthServer {
 																										// gate
 					}
 				});
-
+		
+		try {
+			Thread.sleep(1000l);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		bootstrap.connect(ip, port);
 	}
 }

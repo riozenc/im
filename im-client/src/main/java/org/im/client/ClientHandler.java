@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.riozenc.quicktool.common.util.date.DateUtil;
 
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -36,26 +37,34 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
 		RegisterBean registerBean = new RegisterBean();
 		registerBean.setUserId("chiziyue");
 		registerBean.setUid("17142");
-		ctx.writeAndFlush(registerBean);
+		ChannelFuture cf = ctx.writeAndFlush(registerBean);
+		System.out.println(cf);
 	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message msg) throws Exception {
 		logger.info("received message: {}", msg.getClass());
+		System.out.println("received message: " + msg.getClass());
+
+		if (msg.getClass() == PrivateChatBean.class) {
+			PrivateChatBean p = (PrivateChatBean) msg;
+			if (p.getContent().equals("9")) {
+				PrivateChatBean bean = new PrivateChatBean();
+				bean.setContent("今天天气不错！");
+				bean.setFrom("17142");
+				bean.setTo(p.getFrom());
+				bean.setUid("17142");
+				bean.setDateTime(DateUtil.formatDateTime(new Date()));
+				channelHandlerContext.writeAndFlush(bean);
+			}
+		}
 		if (msg != null) {
 			_verify = true;
 		}
 		// 这样设置的原因是，防止两方都阻塞在输入上
 		if (_verify) {
 			Thread.sleep(Client.frequency);
-			
-			PrivateChatBean bean= new PrivateChatBean();
-			bean.setFrom("17142");
-			bean.setTo("17142");
-			bean.setContent("今晚吃什么");
-			bean.setDateTime(DateUtil.formatDateTime(new Date()));
-			bean.setUid("17142");
-			channelHandlerContext.writeAndFlush(bean);
+
 		}
 	}
 

@@ -48,7 +48,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		}
 
 		// 判断版本号
-		if (DataPackageTool.coverByte(in.readByte()) != Integer.parseInt(Global.getConfig("protocol-version"))) {
+		if (DataPackageTool.coverByte(in.readByte()) != 1) {
 			return;
 		}
 

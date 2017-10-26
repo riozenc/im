@@ -22,7 +22,7 @@ public class DataPackageTool {
 
 	public static byte[] packageMessage(AbstractMessage message) {
 		// 版本号
-		byte version = Byte.parseByte(Global.getConfig("protocol-version"));
+		byte version = 1;
 		// uuid
 		byte[] uuid = string2byte(message.getUid(), 4);
 		int order = ParseMap.getOrder(message.getClass());

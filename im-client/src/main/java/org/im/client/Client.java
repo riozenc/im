@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * Created by Dell on 2016/2/15. Simple client for module test
  */
 public class Client {
-	static final String HOST = System.getProperty("host", "127.0.0.1");
+	static final String HOST = System.getProperty("host", "172.21.29.75");
 	static final int PORT = Integer.parseInt(System.getProperty("port", "9090"));
 	public static final int clientNum = Integer.parseInt(System.getProperty("size", "10"));
 	public static final int frequency = 100; // ms

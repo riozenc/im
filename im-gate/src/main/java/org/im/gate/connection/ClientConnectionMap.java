@@ -56,7 +56,7 @@ public class ClientConnectionMap {
 		if (conn != null)
 			return conn;
 		else {
-			logger.error("ClientConenction not found in allClientMap, uid: {}", uid);
+			logger.error("ClientConenction not found in registerClientMap, uid: {}", uid);
 		}
 		return null;
 	}
@@ -99,6 +99,7 @@ public class ClientConnectionMap {
 
 	public static void removeClientConnection(ChannelHandlerContext c) {
 		ClientConnection conn = getClientConnection(c);
+		if(conn==null) return;
 		Long netid = conn.getNetId();
 		allClientMap.remove(netid);
 		if (ClientConnectionMap.registerClientMap.remove(conn.getUid()) != null) {

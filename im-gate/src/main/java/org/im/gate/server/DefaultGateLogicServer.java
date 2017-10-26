@@ -35,11 +35,16 @@ public class DefaultGateLogicServer {
 						pipeline.addLast("MessageEncoder", new PacketEncoder());
 
 						pipeline.addLast("GateLogicConnectionHandler", new GateLogicHandler()); // logic
-																											// ->
-																											// gate
+																								// ->
+																								// gate
 					}
 				});
-
+		try {
+			Thread.sleep(1000l);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		bootstrap.connect(ip, port);
 
 	}
