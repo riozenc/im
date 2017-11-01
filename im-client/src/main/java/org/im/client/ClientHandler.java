@@ -35,10 +35,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
 
 	void sendTest(ChannelHandlerContext ctx) {
 		RegisterBean registerBean = new RegisterBean();
-		registerBean.setUserId("chiziyue");
-		registerBean.setUid("17142");
+		registerBean.setUserId(String.valueOf(increased.get()));
+		registerBean.setUid(String.valueOf(increased.incrementAndGet()));
 		ChannelFuture cf = ctx.writeAndFlush(registerBean);
-		System.out.println(cf);
 	}
 
 	@Override

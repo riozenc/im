@@ -31,42 +31,50 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		in.markReaderIndex();
 		int length = in.readableBytes();
 		if (length < AbstractMessage.getBaseLength()) {
-			logger.info("readableBytes length less than " + AbstractMessage.getBaseLength() + " bytes, ignored");
+			logger.info("readableBytes(" + length + ") length less than " + AbstractMessage.getBaseLength()
+					+ " bytes, ignored");
 			in.resetReaderIndex();
 			return;
 		}
 
 		// 判断fe fe fe
 		if (DataPackageTool.coverByte(in.readByte()) != 0xFE) {
+
 			return;
 		}
 
 		if (DataPackageTool.coverByte(in.readByte()) != 0xFE) {
+
 			return;
 		}
 
 		if (DataPackageTool.coverByte(in.readByte()) != 0xFE) {
+
 			return;
 		}
 
 		// 判断版本号
 		if (DataPackageTool.coverByte(in.readByte()) != Integer.parseInt(Global.getConfig("protocol-version"))) {
+			in.readerIndex(1);
 			return;
 		}
 
 		// 跳过8位（个人ID和命令）
-		in.readerIndex(3 + 1 + 8);
+		// in.readerIndex(3 + 1 + 8);
+		in.readerIndex(in.readerIndex() + 8);
+
 		// 数据长度
 		byte[] dataLengthBytes = new byte[4];
 		in.readBytes(dataLengthBytes);
 		int dataLength = Integer.parseInt(DataPackageTool.coverBytes(dataLengthBytes), 16);
 		if (length < dataLength + AbstractMessage.getBaseLength()) {
-			logger.info("readableBytes length less than " + (dataLength + AbstractMessage.getBaseLength())
-					+ " bytes, wating");
+			logger.info("readableBytes(" + length + ") length less than [" + dataLength + "(" + dataLengthBytes[0] + " "
+					+ dataLengthBytes[1] + " " + dataLengthBytes[2] + " " + dataLengthBytes[3] + ")]+["
+					+ AbstractMessage.getBaseLength() + "] bytes, wating");
 			in.resetReaderIndex();
 			return;
 		}
-		in.readerIndex(dataLength + AbstractMessage.getBaseLength() - 1);// 固定长度+数据长度
+		in.readerIndex(in.readerIndex() + dataLength + 6 + 1 + 3);// 数据长度+日期长度+校验方式长度+校验码长度
 		// 判断结束符
 		if (DataPackageTool.coverByte(in.readByte()) != 0x16) {
 			return;

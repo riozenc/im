@@ -69,6 +69,7 @@ public class ClientConnectionMap {
 			old.getCtx().close();
 			logger.error("Duplicated netid");
 		}
+		logger.info("{} 号 连接增加.",c.channel().attr(ClientConnection.NETID).get());
 	}
 
 	public static void registerUid(String uid, long netId) {
@@ -83,6 +84,7 @@ public class ClientConnectionMap {
 				} else {
 					removeClientConnection(oldConn.getCtx());
 					registerClientMap.put(conn.getUid(), conn);
+					uid2netidMap.put(conn.getNetId(), uid);
 					logger.error("UID: {}  reconnection.", oldConn.getUid());
 				}
 
@@ -99,7 +101,8 @@ public class ClientConnectionMap {
 
 	public static void removeClientConnection(ChannelHandlerContext c) {
 		ClientConnection conn = getClientConnection(c);
-		if(conn==null) return;
+		if (conn == null)
+			return;
 		Long netid = conn.getNetId();
 		allClientMap.remove(netid);
 		if (ClientConnectionMap.registerClientMap.remove(conn.getUid()) != null) {
@@ -107,6 +110,7 @@ public class ClientConnectionMap {
 		} else {
 			logger.error("uid: {} is not exist in allClientMap", conn.getUid());
 		}
+		uid2netidMap.remove(netid);
 		conn.getCtx().close();
 		logger.info("Client disconnected, netid: {},uid:{}", netid, conn.getUid());
 	}

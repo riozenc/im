@@ -24,7 +24,6 @@ public class ClientConnection {
 	}
 
 	public static AttributeKey<Long> NETID = AttributeKey.valueOf("netid");
-//	public static AttributeKey<String> UID = AttributeKey.valueOf("UID");
 
 	private ChannelHandlerContext ctx;
 	private long netId;

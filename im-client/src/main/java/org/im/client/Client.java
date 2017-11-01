@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public class Client {
 	static final String HOST = System.getProperty("host", "172.21.29.75");
 	static final int PORT = Integer.parseInt(System.getProperty("port", "9090"));
-	public static final int clientNum = Integer.parseInt(System.getProperty("size", "10"));
+	public static final int clientNum = Integer.parseInt(System.getProperty("size", "1000"));
 	public static final int frequency = 100; // ms
 
 	private static final Logger logger = LoggerFactory.getLogger(Client.class);
@@ -42,11 +42,11 @@ public class Client {
 				});
 
 		// Start the client.
-//		for (int i = 1; i <= clientNum; i++) {
-//			startConnection(b, i);
-//		}
-		
-		startConnection(b, 1);
+		for (int i = 1; i <= clientNum; i++) {
+			startConnection(b, i);
+		}
+
+		// startConnection(b, 1);
 
 	}
 

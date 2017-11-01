@@ -23,10 +23,15 @@ public class PacketEncoder extends MessageToByteEncoder<Message> {
 		// int ptoNum = ParseMap.msg2ptoNum.get(msg);
 		int length = bytes.length;
 
-		out.writeBytes(bytes);
+		StringBuilder stringBuilder = new StringBuilder();
+		for (byte b : bytes) {
+			stringBuilder.append(" ").append(b);
+		}
 
-		logger.info("GateServer Send Message, remoteAddress: {}, content length {}", ctx.channel().remoteAddress(),
-				length);
+		out.writeBytes(bytes);
+		System.out.println(msg.getUid() + " " + length + " " + stringBuilder);
+		logger.info("GateServer Send Message({}), remoteAddress: {}, content length {}, data: {}", msg.getUid(),
+				ctx.channel().remoteAddress(), length, stringBuilder);
 	}
 
 }
