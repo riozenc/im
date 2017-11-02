@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -41,7 +42,8 @@ public class GateAuthHandler extends SimpleChannelInboundHandler<Message> {
 	protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
 		// TODO Auto-generated method stub
 		String uid = msg.getUid();
-		ClientConnectionMap.getClientConnection(uid).getCtx().writeAndFlush(msg);
+		ChannelFuture channelFuture = ClientConnectionMap.getClientConnection(uid).getCtx().writeAndFlush(msg);
+		System.out.println(channelFuture);
 	}
 
 	private void sendGreet2Auth() {
